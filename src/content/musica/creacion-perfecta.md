@@ -1,0 +1,101 @@
+---
+# 1. IDENTIDAD
+title: "Creación perfecta"
+slug: "creacion-perfecta"
+status: "published"
+year: 2024
+composer: "Cristian Sanchez Esquivel"
+lyricist: "Cristian Sanchez Esquivel"
+
+# 2. FICHA TÉCNICA
+technical:
+  key: "C"
+  time: "4/4"
+  tempo: 84
+  # duration: 0 # Completar si se conoce
+
+# 3. COVER Y FONDO
+design:
+  coverart: "/src/assets/images/covers/creacion-perfecta.jpg"
+  coverart_alt: "Portada de Creación Perfecta"
+  background_color: "#3e8d8b" # Color por defecto
+
+# 8. SEO
+seo:
+  title: "Creación Perfecta - Tiempo de Alabar"
+  description: "Letra y acordes de Creación Perfecta."
+  og_image: "/src/assets/images/og/creacion-perfecta.jpg"
+---
+
+{title: Creación perfecta}
+{composer: Cristian Sanchez Esquivel}
+{lyricist: Cristian Sanchez Esquivel}
+
+{start_of_grid label="Intro"}
+|| C . F . | Am  . G . |  C . F . | Am  . G . ||
+{end_of_grid}
+
+{start_of_section: Verso 1}
+[C]Cuando me desp[G]ierto en la ma[Am]ñana [F]
+[C]veo el sol ent[G]rar por mi ven[Am]tana [F]
+¿Quién lo [Am]puso de ma[G]nera tan perf[F]ecta?
+No nos [Am]quema y tamp[G]oco nos cong[F]ela.
+{end_of_section}
+
+{start_of_section: Verso 2}
+[C]Una flor vio[G]leta en la ma[Am]ceta, [F]
+[C]una marip[G]osa sobre el[Am]la,  [F]
+¿Quién midi[Am]ó sus proporc[G]iones tan per[F]fectas?
+¿Quién les d[Am]io ese col[G]or a las vio[F]letas?
+{end_of_section}
+
+{start_of_section: Pre coro}
+Una p[C]ista voy a d[Am]ar, que no fu[F]e casualid[G]ad
+hay un D[C]ios en las alt[Am]uras, que hizo [Dm]todo con amor,
+que hizo t[F]odo para v[G]os.
+{end_of_section}
+
+{start_of_section: Coro}
+[C]Anda, disf[F]ruta de esta [Am]vida
+que [F]todo lo que [Am]hay en ella es [Dm]para tu fel[G]icidad.
+[C]Canta, disf[F]ruta de esta [Am]vida,
+que [Dm]Dios la hizo para vos, la h[F]izo con gran perfección,
+la h[Dm]izo para [G]tu felicid[C]ad.
+{end_of_section}
+
+{start_of_grid label="Intro"}
+|| C . F . | Am  . G . |  C . F . | Am  . G . ||
+{end_of_grid}
+
+{start_of_section: Verso 3}
+[C]Ya sabés que ex[G]iste un Dios g[Am]rande  [F]
+[C]que hizo todo p[G]ara aleg[Am]rarte,  [F]
+ahora tie[Am]nes que llev[G]ar esa aleg[F]ría
+a este m[Am]undo que tan[G]to lo neces[F]ita.
+{end_of_section}
+
+{start_of_section: Verso 4}
+[C]Hay una prom[G]esa que se ha [Am]dado:  [F]
+[C]pronto será t[G]odo restau[Am]rado   [F]
+y tend[Am]remos una n[G]ueva vida p[F]lena,
+la aleg[Am]ría será nu[G]estra herencia et[F]erna.
+
+{start_of_section: Pre coro}
+Una p[C]ista voy a d[Am]ar, que no fu[F]e casualid[G]ad
+Jesucr[C]isto escrib[Am]ió ese plan, y [Dm]vino a cumplirlo,
+para que [F]siempre seas fe[G]liz.
+{end_of_section}
+
+{start_of_section: Coro}
+[C]Laaara lala [F]la larala, [C]Laaara lala [F]la larala,
+[C]Laaara lala [F]la larala, [Dm]Laaa [C/E]raaa [F]laaa [G]ahhh
+{end_of_section}
+
+{start_of_section: Coro final}
+[C]Anda, disf[F]ruta de esta [Am]vida
+que [F]todo lo que [Am]hay en ella es [Dm]para tu fel[G]icidad.
+[C]Canta, disf[F]ruta de esta [Am]vida,
+que [Dm]Dios la hizo para vos, la h[F]izo con gran perfección,
+la h[Dm]izo para [G]tu felicid[C]ad. [F] [Am]
+[G]Tu felicida[C]d,[F] [Am] [G]  tu felicidad. [C]
+{end_of_section}

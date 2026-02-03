@@ -1,0 +1,716 @@
+backend:
+  name: github
+  repo: alexisscordoba/tiempo-de-alabar # Asegúrate de que este sea el repo final
+  branch: main
+  base_url: https://auth.tiempodealabar.workers.dev # Tu Worker de autenticación
+  auth_endpoint: /auth
+
+media_folder: "public/assets/system"
+public_folder: "/assets/system"
+
+collections:
+  - name: "musica"
+    label: "🎵 Canciones"
+    folder: "src/content/musica"
+    create: true
+    slug: "{{slug}}" # Usar el slug sanitizado para el nombre del archivo
+    extension: "md"
+    format: "frontmatter"
+    fields:
+      # --- 1. IDENTIDAD ---
+      - { label: "Título", name: "title", widget: "string" }
+      - { label: "Slug URL", name: "slug", widget: "slug", from: "title" }
+      - { label: "Estado", name: "status", widget: "select", options: ["published", "draft"] }
+      - { label: "Año", name: "year", widget: "number" }
+      - { label: "Compositor", name: "composer", widget: "string" }
+      - { label: "Autor Letra", name: "lyricist", widget: "string" }
+
+      # --- 2. FICHA TÉCNICA ---
+      - label: "Ficha Técnica"
+        name: "technical"
+        widget: "object"
+        fields:
+          - { label: "Tono Original", name: "key", widget: "select", options: ["Ab", "A", "A#", "Bb", "B", "C", "C#", "Db", "D", "D#", "Eb", "E", "F", "F#", "Gb", "G", "G#"] }
+          - { label: "Compás (Time)", name: "time", widget: "string" }
+          - { label: "Tempo (BPM)", name: "tempo", widget: "number" }
+          - { label: "Duración (ms)", name: "duration", widget: "number", hint: "Ingresa el tiempo en milisegundos", required: false }
+          - { label: "Estructura", name: "structure", widget: "string", required: false }
+          - { label: "CCLI #", name: "ccli", widget: "number", required: false }
+
+      # --- 3. COVER Y FONDO ---
+      - label: "Diseño"
+        name: "design"
+        widget: "object"
+        fields:
+          - { label: "Portada", name: "coverart", widget: "image" }
+          - { label: "Texto Alt Portada", name: "coverart_alt", widget: "string" }
+          - { label: "Color de fondo (HEX)", name: "background_color", widget: "color" }
+
+      # --- 4. DISTRIBUCIÓN Y STREAMING ---
+      - label: "Streaming"
+        name: "streaming"
+        widget: "object"
+        fields:
+          - { label: "YouTube Clip (ID)", name: "youtube_clip", widget: "string", required: false }
+          - { label: "Spotify Link", name: "spotify", widget: "string", required: false }
+          - { label: "Apple Music Link", name: "apple", widget: "string", required: false }
+          - { label: "YouTube Music Link", name: "youtubemusic", widget: "string", required: false }
+          - { label: "Deezer Link", name: "deezer", widget: "string", required: false }
+          - { label: "Amazon Music Link", name: "amazon", widget: "string", required: false }
+          - { label: "Tidal Link", name: "tidal", widget: "string", required: false }
+          - { label: "SoundCloud Link", name: "soundcloud", widget: "string", required: false }
+
+      # --- 5. RECURSOS DESCARGABLES ---
+      - label: "Recursos para descargar"
+        name: "resources"
+        widget: "list"
+        summary: "{{fields.label}}"
+        fields:
+          - { label: "Nombre del Recurso", name: "label", widget: "string", hint: "Ej: Partitura PDF" }
+          - { label: "Archivo o Link", name: "file_url", widget: "string" }
+      
+     # --- 6. RECURSOS EXTERNOS (VIDEOS) ---
+      - label: "Recursos externos"
+        name: "resources_videos"
+        widget: "list"
+        summary: "{{fields.label}}"
+        fields:
+          - { label: "Nombre del video", name: "label", widget: "string", hint: "Tutorial de piano" }
+          - { label: "ID del Video", name: "youtube_id", widget: "string", hint: "Solo el código después de v=" }
+
+      # --- 7. ACERCA DE LA CANCIÓN ---
+      - label: "Metadatos"
+        name: "meta"
+        widget: "object"
+        fields:
+          - { label: "Referencias Bíblicas", name: "biblerefs", widget: "list" }
+          - { label: "Etiquetas (Tags)", name: "tags", widget: "list" }
+      - { label: "Descripción Breve", name: "description", widget: "markdown", required: false }
+      - { label: "Historia de la Canción", name: "history", widget: "markdown", required: false }
+
+      # --- 8. SEO ---
+      - label: "SEO"
+        name: "seo"
+        widget: "object"
+        fields:
+          - { label: "Meta Título", name: "title", widget: "string" }
+          - { label: "Meta Descripción", name: "description", widget: "text" }
+          - { label: "Imagen Social (OG)", name: "og_image", widget: "image" }
+
+      # --- 9. CUERPO (CHORDPRO) ---
+      - { label: "Letra y Acordes (ChordPro)", name: "body", widget: "code", default_language: "markdown" }
+
+  - name: "eventos"
+    label: "📅 Agenda y Eventos"
+    folder: "src/content/eventos"
+    create: true
+    slug: "{{year}}-{{slug}}"
+    extension: "md"
+    format: "frontmatter"
+    fields:
+      # --- 1. IDENTIDAD ---
+      - { label: "Nombre del Evento", name: "title", widget: "string" }
+      - { label: "Año", name: "year", widget: "number", hint: "Ej: 2026" }
+      # Campo autogenerado para la URL y nombre de archivo
+      - { label: "Slug URL", name: "slug", widget: "slug", from: "title" }
+      - { label: "Flyer / Poster (Obligatorio)", name: "cover", widget: "image" }
+      - { label: "Descripción de imagen (Alt)", name: "cover_alt", widget: "string" }
+      - label: "Estado"
+        name: "status"
+        widget: "select"
+        default: "draft"
+        options: 
+          - { label: "Borrador (Oculto)", value: "draft" }
+          - { label: "Próximamente", value: "upcoming" }
+          - { label: "Programado (Activo)", value: "scheduled" }
+          - { label: "Agotado", value: "sold_out" }
+          - { label: "Cancelado", value: "canceled" }
+          - { label: "Archivado (Historial)", value: "archived" }
+      - { label: "Evento destacado", name: "featured", widget: "boolean", default: false }
+
+      # --- 2. LOGISTICA ---
+      - { label: "Fecha Inicio", name: "date", widget: "date", format: "YYYY-MM-DD" }
+      - { label: "Fecha Fin (Opcional)", name: "end_date", widget: "date", format: "YYYY-MM-DD", required: false }
+      - label: "Hora Inicio"
+        name: "time"
+        widget: "string"
+        hint: "Formato estricto HH:mm (Ej: 19:30)"
+        pattern: ['^([01]\d|2[0-3]):([0-5]\d)$', "Debe incluir los dos puntos, ej: 20:00"]
+      - label: "Hora Fin (Opcional)"
+        name: "end_time"
+        widget: "string"
+        required: false
+        pattern: ['^([01]\d|2[0-3]):([0-5]\d)$', "Debe incluir los dos puntos, ej: 22:30"]
+      - { label: "Información de Precio", name: "price", widget: "string", default: "Entrada libre y gratuita" }
+      - { label: "Link de Reserva/Tickets", name: "link_reserve", widget: "string", required: false }
+
+      # --- 3. UBICACION ---
+      - label: "Ubicación"
+        name: "location"
+        widget: "object"
+        fields:
+          - label: "Tipo de Lugar"
+            name: "type"
+            widget: "select"
+            options:
+             - { label: "Iglesia", value: "church" }
+             - { label: "Parque", value: "park" }
+             - { label: "Teatro", value: "theater" }
+             - { label: "Auditorio", value: "auditorium" }
+             - { label: "Estadio", value: "stadium" }
+             - { label: "Sala", value: "hall" }
+             - { label: "Otro", value: "other" }
+          - { label: "Nombre del Lugar", name: "name", widget: "string" }
+          - { label: "Dirección", name: "address", widget: "string", required: false }
+          - { label: "Ciudad", name: "city", widget: "string", required: false }
+          - { label: "Latitud (Mapa)", name: "lat", widget: "number", value_type: "float", required: false }
+          - { label: "Longitud (Mapa)", name: "lng", widget: "number", value_type: "float", required: false }
+
+      # --- 4. EXPERIENCIA (Contenido) ---
+      - label: "Contenido del Evento"
+        name: "content"
+        widget: "object"
+        fields:
+          - { label: "Invitados Especiales", name: "guests", widget: "string", required: false }
+          - label: "Setlist"
+            name: "setlist"
+            widget: "list"
+            summary: "{{fields.custom_name}} {{fields.song_id}}"
+            fields:
+              - label: "Canción publicada"
+                name: "song_id"
+                widget: "relation"
+                collection: "musica"
+                search_fields: ["title"]
+                display_fields: ["title"]
+                required: false
+              - { label: "Nombre personalizado", name: "custom_name", widget: "string", required: false }
+          - { label: "Galería de Fotos", name: "gallery", widget: "list", field: { widget: "image" }, required: false }
+          - { label: "Carpeta de Prensa", name: "link_promo", widget: "string", required: false }
+    
+      # --- 5. SEO ---
+      - label: "SEO"
+        name: "seo"
+        widget: "object"
+        fields:
+          - { label: "Título SEO", name: "title", widget: "string" }
+          - { label: "Descripción SEO", name: "description", widget: "text" }
+          - { label: "Imagen Social (OG)", name: "og_image", widget: "image" }
+     
+      # --- CUERPO ---
+      - { label: "Descripción Detallada", name: "body", widget: "markdown" }
+
+  - name: "members"
+    label: "👥 Miembros"
+    folder: "src/content/members"
+    create: true
+    slug: "{{slug}}" # Usamos el slug explícito para estabilidad
+    extension: "md"
+    format: "frontmatter"
+    fields:
+      
+      # --- 1. IDENTIDAD y ESTADO ---
+      - { label: "Nombre Completo", name: "name", widget: "string" }
+      - { label: "Apodo / Nombre Corto", name: "nickname", widget: "string" }
+      - { label: "Slug URL", name: "slug", widget: "slug", from: "nickname" }
+      - label: "Estado"
+        name: "status"
+        widget: "select"
+        default: "active"
+        options: 
+          - { label: "Borrador (Oculto)", value: "draft" }
+          - { label: "Activo", value: "active" }
+          - { label: "Ex-integrante", value: "former" }
+      - { label: "Orden de Aparición", name: "order", widget: "number", default: 1 }
+
+      # --- 2. FECHAS ---
+      - { label: "Fecha de Inicio", name: "start_date", widget: "date", format: "YYYY-MM-DD" }
+      - { label: "Fecha de Salida", name: "end_date", widget: "date", format: "YYYY-MM-DD", required: false, hint: "Obligatorio solo para ex-integrantes" }
+
+      # --- 3. ROLES (Relación con la colección roles) ---
+      - label: "Funciones en la Banda"
+        name: "roles"
+        widget: "relation"
+        collection: "roles" # Referencia a la colección roles
+        search_fields: ["rol_name"]
+        value_field: "rol_id"
+        display_fields: ["rol_name"]
+        multiple: true
+
+      # --- 4. FOTOS ---
+      - label: "Fotos"
+        name: "photos"
+        widget: "object"
+        fields:
+          - { label: "Foto de Perfil", name: "ph_profile", widget: "image", hint: "Usar imagen 2:3" }
+          - { label: "Descripción de la foto de perfil", name: "ph_profile_alt", widget: "string" }
+          - { label: "Foto de Perfil Secundaria", name: "ph_secondary", widget: "image", hint: "Usar imagen 2:3", required: false } 
+          - { label: "Descripción de la foto de perfil secundaria", name: "ph_secondary_alt", widget: "string", required: false }
+          - { label: "Galería Personal", name: "gallery", widget: "list", field: { widget: "image" }, required: false }
+
+      # --- 5. BIO CORTA & SOCIAL ---
+      - { label: "Bio Corta", name: "bio_short", widget: "string" }
+      - label: "Redes Sociales"
+        name: "social"
+        widget: "object"
+        fields:
+          - { label: "Instagram", name: "instagram", widget: "string", required: false }
+          - { label: "YouTube", name: "youtube", widget: "string", required: false }
+          - { label: "TikTok", name: "tiktok", widget: "string", required: false }
+          - { label: "Facebook", name: "facebook", widget: "string", required: false }
+          - { label: "X/Twitter", name: "x", widget: "string", required: false }
+          - { label: "SoundCloud", name: "soundcloud", widget: "string", required: false }
+          - { label: "Spotify", name: "spotify", widget: "string", required: false }
+
+      # --- BIO COMPLETA (BODY) ---
+      - { label: "Biografía Completa", name: "body", widget: "markdown" }
+
+  - name: "roles"
+    label: "🎸 Roles y Funciones"
+    folder: "src/content/roles"
+    create: true
+    slug: "{{rol_id}}" # Coincide con la relación de members
+    extension: "md"
+    format: "frontmatter"
+    fields:
+      - { label: "ID del Rol", name: "rol_id", 
+          widget: "string", 
+          pattern: ['^rol-[a-z0-9-]+$', "El ID debe empezar con 'rol-' y usar solo minúsculas y guiones"],
+          hint: "ej: rol-vocal" }
+      - { label: "Nombre", 
+          name: "rol_name", 
+          widget: "string", 
+          hint: "Nombre del rol (ej: Voz, Guitarra)" }
+      - { label: "Icono (Identificador)", 
+          name: "rol_icon", 
+          widget: "string", 
+          hint: "ID del icono para el frontend" }
+
+  - name: "hitos"
+    label: "⏳ Línea de Tiempo (Hitos)"
+    folder: "src/content/hitos"
+    create: true
+    slug: "{{year}}-{{slug}}" # Nombre del archivo .md
+    extension: "md"
+    format: "frontmatter"
+    fields:
+      # --- 1. IDENTIDAD ---
+      - { label: "Título del Hito", name: "title", widget: "string" }
+      - { label: "Año", name: "year", widget: "number", hint: "Ej: 2024" }
+      - { label: "Fecha exacta", name: "date", widget: "date", format: "YYYY-MM-DD", required: false }
+      - { label: "Hito Destacado", name: "featured", widget: "boolean", default: false, hint: "¿Resaltar visualmente este momento en la línea de tiempo?" }
+
+      # --- 2. CONFIGURACIÓN DE NAVEGACIÓN ---
+      - { label: "¿Tiene página propia?", name: "has_subpage", widget: "boolean", default: false }
+      - { label: "Slug URL", 
+          name: "slug", 
+          widget: "slug", 
+          from: "title", 
+          hint: "Identificador URL y nombre de archivo (Obligatorio)." }
+
+      # --- 3. DISEÑO Y RECURSOS ---
+      - label: "Diseño y Vínculos"
+        name: "design"
+        widget: "object"
+        fields:
+          - { label: "Imagen de Portada (Cover)", name: "cover", widget: "image", hint: "La relación de aspecto debe ser 2:3" }
+          - { label: "Galería de Fotos", name: "gallery", widget: "list", field: { widget: "image" }, required: false }
+          - { label: "Canción vinculada", 
+              name: "related_song", 
+              widget: "relation", 
+              collection: "musica", 
+              search_fields: ["title"], 
+              display_fields: ["title"], 
+              required: false,
+              hint: "Si el hito es un lanzamiento, se vincula aquí."}
+          - { label: "Evento vinculado", 
+              name: "related_event", 
+              widget: "relation", 
+              collection: "eventos", 
+              search_fields: ["title"], 
+              display_fields: ["title"], 
+              required: false,
+              hint: "Si el hito es un evento, se vincula aquí."}
+
+      # --- 4. CONTENIDO ---
+      - { label: "Resumen", 
+          name: "summary", 
+          widget: "text", 
+          hint: "Descripción breve." }
+      - { label: "Historia Completa", 
+          name: "body", 
+          widget: "markdown", 
+          required: false,
+          hint: "Contenido completo para la subpágina individual." }
+
+      # --- 5. SEO ---
+      - label: "SEO"
+        name: "seo"
+        widget: "object"
+        fields:
+          - { label: "Título SEO", name: "title", widget: "string" }
+          - { label: "Descripción SEO", name: "description", widget: "text" }
+          - { label: "Imagen Social (OG)", name: "og_image", widget: "image" }
+
+  - name: "settings"
+    label: "⚙️ Configuración"
+    delete: false
+    files:
+      - label: "Ajustes Generales"
+        name: "globals"
+        file: "src/content/data/globals.yaml"
+        fields:
+          # --- 1. INFORMACIÓN DEL SITIO ---
+          - label: "Información General"
+            name: "site_info"
+            widget: "object"
+            fields:
+              - { label: "Copyright", name: "legal", widget: "string" }
+              - { label: "Desarrollo", name: "developed", widget: "string" }
+
+          # --- 2. DATOS DE CONTACTO ---
+          - label: "Datos de Contacto"
+            name: "contact_info"
+            widget: "object"
+            fields:
+              - { label: "Teléfono", name: "phone", widget: "string" }
+              - { label: "Email", name: "email", widget: "string" }
+              - { label: "Ubicación", name: "location", widget: "string" }
+
+          # --- 3. REDES Y ENLACES ---
+          - label: "Enlaces y Redes Sociales"
+            name: "links"
+            widget: "list"
+            summary: "{{label}} ({{type}})"
+            fields:
+              - { label: "Etiqueta", name: "label", widget: "string" }
+              - { label: "URL", name: "url", widget: "string" }
+              - label: "Categoría"
+                name: "type"
+                widget: "select"
+                options:
+                  - { label: "Streaming", value: "streaming" }
+                  - { label: "Video", value: "video" }
+                  - { label: "Red Social", value: "social" }
+                  - { label: "Contacto", value: "contact" }
+              - { label: "Icono (ID)", name: "icon", widget: "string", required: false, hint: "ej: simple-icons:spotify" }
+
+  - name: "pages"
+    label: "📄 Páginas"
+    delete: false
+    files:
+      - label: "Página de Inicio"
+        name: "inicio"
+        file: "src/content/pages/inicio.md"
+        fields:
+          # --- 1. SECCION HERO ---
+          - label: "Sección Hero (Portada)"
+            name: "hero"
+            widget: "object"
+            fields:
+              - { label: "Título", name: "title", widget: "string" }
+              - { label: "Subtítulo", name: "subtitle", widget: "string", required: false }
+              - { label: "Imagen o Video de Fondo", name: "background", widget: "image", hint: "Soportado: .jpg, .png o .mp4" }
+              - { label: "Texto Botón Primario", name: "cta_primary_label", widget: "string", default: "Nuestra música" }
+              - { label: "Link Botón Primario", name: "cta_primary_link", widget: "string", default: "/musica" }
+              - { label: "Texto Botón Secundario", name: "cta_secondary_label", widget: "string", default: "Agenda" }
+              - { label: "Link Botón Secundario", name: "cta_secondary_link", widget: "string", default: "/agenda" }
+
+          # --- 2. FRASE DESTACADA ---
+          - label: "Frase destacada"
+            name: "quote_block"
+            widget: "object"
+            fields:
+              - { label: "Mostrar esta sección", name: "active", widget: "boolean", default: true }
+              - { label: "Frase", name: "text", widget: "text" }
+
+          # --- 3. CONTENIDO DESTACADO ---
+          - label: "Contenido Destacado"
+            name: "featured"
+            widget: "object"
+            fields:
+              - label: "Evento Destacado"
+                name: "event"
+                widget: "relation"
+                collection: "eventos"
+                search_fields: ["title"]
+                display_fields: ["title"]
+                required: false
+              - label: "Canción Destacada"
+                name: "song"
+                widget: "relation"
+                collection: "musica"
+                search_fields: ["title"]
+                display_fields: ["title"]
+                required: false
+
+          # --- NUESTRA MUSICA ---
+          - label: "Nuestra música"
+            name: "musica_snippet"
+            widget: "object"
+            fields:
+              - { label: "Título", name: "title", widget: "text" }
+              - { label: "Título para el final", name: "text", widget: "text" }
+              - { label: "Texto del botón", name: "button_label", widget: "string", default: "Nuestra música" }
+
+          # --- 5. SEO ---
+          - label: "SEO"
+            name: "seo"
+            widget: "object"
+            fields:
+              - { label: "Título SEO", name: "title", widget: "string" }
+              - { label: "Descripción SEO", name: "description", widget: "text" }
+              - { label: "Imagen Social (OG)", name: "og_image", widget: "image" }
+
+      - label: "Acerca de"
+        name: "acerca_de"
+        file: "src/content/pages/acerca-de.md"
+        fields:
+          # --- 1. HERO SECTION ---
+          - label: "Sección Hero"
+            name: "hero"
+            widget: "object"
+            fields:
+              - { label: "Título Principal", name: "title", widget: "string", default: "¿Quiénes somos?" }
+              - { label: "Subtítulo", name: "subtitle", widget: "string", required: false }
+              - { label: "Imagen de fondo", name: "background", widget: "image" }
+
+          # --- 2. IDENTIDAD Y NARRATIVA ---
+          - label: "Identidad del Ministerio"
+            name: "identity"
+            widget: "object"
+            fields:
+              - { label: "Descripción", name: "description", widget: "text", hint: "Texto corto sobre la agrupación." }
+              - { label: "Nuestra Historia", name: "history", widget: "markdown", required: false, hint: "Relato detallado desde el inicio en 2016." }
+              - label: "Objetivos y Desafíos"
+                name: "goals"
+                widget: "list"
+                field: { label: "Meta/Desafío", name: "item", widget: "string" }
+
+          # --- 3. GALERÍA ---
+          - label: "Galería Institucional"
+            name: "gallery"
+            widget: "list"
+            field: { label: "Imagen", name: "image", widget: "string" }
+
+          # --- 4. SEO ---
+          - label: "SEO"
+            name: "seo"
+            widget: "object"
+            fields:
+              - { label: "Título SEO", name: "title", widget: "string" }
+              - { label: "Descripción SEO", name: "description", widget: "text" }
+              - { label: "Imagen Social (OG)", name: "og_image", widget: "image" }
+
+      - label: "Organicemos un evento"
+        name: "organizar"
+        file: "src/content/pages/organizar.md"
+        fields:
+          # --- 1. HERO SECTION ---
+          - label: "Sección Hero"
+            name: "hero"
+            widget: "object"
+            fields:
+              - { label: "Título", name: "title", widget: "string", default: "Organicemos un evento juntos" }
+              - { label: "Subtítulo", name: "subtitle", widget: "string", required: false }
+              - { label: "Imagen de fondo", name: "background", widget: "image" }
+
+          # --- 2. INTRODUCCIÓN GENERAL ---
+          - label: "Información general"
+            name: "info"
+            widget: "object"
+            fields:
+              - { label: "Objetivo principal", name: "objective", widget: "text" }
+              - { label: "Cantidad del grupo", name: "group", widget: "string", hint: "Ej: 11 personas" }
+              - { label: "Imagen destacada", name: "featured_img", widget: "image" }
+
+          # --- 3. RIDER TÉCNICO ---
+          - label: "Rider Técnico"
+            name: "rider"
+            widget: "object"
+            fields:
+              - { label: "Imagen del Stageplot", name: "stageplot_img", widget: "image" }
+              - { label: "Archivo PDF Stageplot", name: "stageplot_pdf", widget: "file" }
+              - label: "Input List (Lista de Canales)"
+                name: "input_list"
+                widget: "list"
+                field: { label: "Canal - Nombre", name: "item", widget: "string", hint: "Ej: Ch08 - Piano" }
+
+          # --- 4. LOGÍSTICA Y BACKLINE ---
+          - label: "Logística y Necesidades"
+            name: "logistics"
+            widget: "object"
+            fields:
+              - label: "Necesidades Generales"
+                name: "needs"
+                widget: "list"
+                field: { label: "Necesidades", name: "item", widget: "string" }
+              - label: "Backline que PROVEE la banda"
+                name: "backline_provided"
+                widget: "list"
+                field: { label: "Elemento", name: "item", widget: "string" }
+              - label: "Galería de Equipamiento (Slider)"
+                name: "backline_gallery"
+                widget: "list"
+                field: { label: "Foto", name: "image", widget: "image" }
+              - label: "PDF - lista de equipamientos"
+                name: "backline_list"
+                widget: "file"
+              - label: "Backline que REQUIERE el organizador"
+                name: "backline_required"
+                widget: "list"
+                field: { label: "Elemento", name: "item", widget: "string" }
+
+          # --- 5. SEO ---
+          - label: "SEO"
+            name: "seo"
+            widget: "object"
+            fields:
+              - { label: "Título SEO", name: "title", widget: "string" }
+              - { label: "Descripción SEO", name: "description", widget: "text" }
+              - { label: "Imagen Social", name: "og_image", widget: "image" }
+
+      - label: "Donaciones (Apoyo)"
+        name: "apoyo"
+        file: "src/content/pages/apoyo.md"
+        fields:
+          # --- 1. HERO SECTION ---
+          - label: "Sección Hero"
+            name: "hero"
+            widget: "object"
+            fields:
+              - { label: "Título", name: "title", widget: "string", default: "Tu ayuda" }
+              - { label: "Subtítulo", name: "subtitle", widget: "string", default: "Puedes hacer la diferencia" }
+              - { label: "Imagen de fondo", name: "background", widget: "image" }
+
+          # --- 2. DESTINO DE FONDOS ---
+          - label: "Destino de los fondos"
+            name: "allocation"
+            widget: "object"
+            fields:
+              - { label: "Título de sección", name: "title", widget: "string", default: "¿En qué se utiliza tu donación?" }
+              - label: "Ítems de inversión"
+                name: "items"
+                widget: "list"
+                field: { label: "Uso", name: "item", widget: "string" }
+
+          # --- 3. FORMAS DE COLABORAR ---
+          - label: "Formas de colaborar"
+            name: "ways"
+            widget: "object"
+            fields:
+              - { label: "Título de sección", name: "title", widget: "string", default: "Formas de colaborar" }
+              - label: "Categorías" 
+                name: "categories"
+                widget: "list"
+                field: { label: "Categoría", name: "item", widget: "string" }
+
+          # --- 4. METODOS DE DONACIÓN DE DINERO ---
+          - label: "Métodos de Donación"
+            name: "donation"
+            widget: "object"
+            fields:
+              - { label: "Titulo de sección", name: "title", widget: "string", default: "Si querés apoyar este ministerio económicamente, puedes hacerlo de la forma que prefieras" }
+              - { label: "Link MercadoPago", name: "mp_link", widget: "string", required: false }
+              - { label: "Link PayPal", name: "paypal_link", widget: "string", required: false }
+              - { label: "CBU / CVU", name: "bank_cbu", widget: "string", required: false }
+              - { label: "Alias", name: "bank_alias", widget: "string", required: false }
+              - { label: "Titular de Cuenta", name: "bank_holder", widget: "string", required: false }
+     
+          # --- 5. AGRADECIMIENTO ---
+          - label: "Mensaje de agradecimiento"
+            name: "gratitude"
+            widget: "object"
+            fields:
+              - { label: "Texto Principal", name: "text", widget: "string", default: "Muchas gracias por colaborar" }
+              - { label: "Imagen Grupal", name: "image", widget: "image" }
+
+          # --- 6. SEO ---
+          - label: "SEO"
+            name: "seo"
+            widget: "object"
+            fields:
+              - { label: "Título SEO", name: "title", widget: "string" }
+              - { label: "Descripción SEO", name: "description", widget: "text" }
+              - { label: "Imagen Social", name: "og_image", widget: "image" }
+
+      - label: "Contacto"
+        name: "contacto"
+        file: "src/content/pages/contacto.md"
+        fields:
+          # --- 1. HERO ---
+          - label: "Hero"
+            name: "hero"
+            widget: "object"
+            fields:
+              - { label: "Título", name: "title", widget: "string", default: "Contactanos" }
+              - { label: "Subtítulo", name: "subtitle", widget: "text", default: "Organicemos un concierto juntos. Estamos aquí para hacer un momento especial de adoración." }
+
+          # --- 2. CONFIGURACIÓN DEL FORMULARIO ---
+          - label: "Formulario de Contacto"
+            name: "form"
+            widget: "object"
+            fields:
+              - { label: "Etiqueta Botón Enviar", name: "submit_label", widget: "string", default: "Enviar mensaje" }
+              - { label: "Mensaje de Confirmación", name: "success_message", widget: "text", default: "¡Muchas gracias por contactarnos! Te responderemos a la brevedad." }
+
+          # --- 3. SEO ---
+          - label: "SEO"
+            name: "seo"
+            widget: "object"
+            fields:
+              - { label: "Título SEO", name: "title", widget: "string" }
+              - { label: "Descripción SEO", name: "description", widget: "text" }
+              - { label: "Imagen Social", name: "og_image", widget: "image" }
+
+      - label: "Bio"
+        name: "bio"
+        file: "src/content/pages/bio.md"
+        fields:
+          # --- 1. IDENTIDAD ---
+          - label: "Identidad de la Bio"
+            name: "identity"
+            widget: "object"
+            fields:
+              - { label: "Foto de Perfil", name: "photo", widget: "image" }
+              - { label: "Título", name: "title", widget: "string", default: "Tiempo de Alabar" }
+              - { label: "Breve Descripción", name: "bio_text", widget: "string", required: false }
+          
+          # --- 2. ESTILO ---
+          - label: "Personalización Visual"
+            name: "style"
+            widget: "object"
+            fields:
+              - { label: "Imagen de Fondo", name: "background", widget: "image", required: false }
+              - { label: "Color de acento", name: "accent_color", widget: "color", default: "#3e8d8b" }
+          
+          # --- 3. VIDEO DESTACADO ---
+          - label: "Video Destacado"
+            name: "featured_video"
+            widget: "object"
+            fields:
+              - { label: "¿Mostrar Video?", name: "active", widget: "boolean", default: false }
+              - { label: "ID de Video (YouTube)", name: "youtube_id", widget: "string", hint: "Solo el código, ej: dQw4w9WgXcQ" }
+              - { label: "Título del video", name: "title", widget: "string", required: false }
+
+          # --- 4. EVENTO DESTACADO ---
+          - label: "Evento Destacado"
+            name: "featured_event"
+            widget: "object"
+            fields:
+              - { label: "¿Mostrar Evento?", name: "active", widget: "boolean", default: false }
+              - label: "Seleccionar Evento"
+                name: "event_ref"
+                widget: "relation"
+                collection: "eventos"
+                search_fields: ["title"]
+                display_fields: ["title"]
+              - { label: "Texto del Botón", name: "cta_label", widget: "string", default: "Ver detalles del evento" }
+
+          # --- 5. SEO ---
+          - label: "SEO"
+            name: "seo"
+            widget: "object"
+            fields:
+              - { label: "Título SEO", name: "title", widget: "string", default: "Enlaces | Tiempo de Alabar" }
+              - { label: "Descripción SEO", name: "description", widget: "text" }

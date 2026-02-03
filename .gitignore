@@ -1,0 +1,14 @@
+# Dependencias (muy pesadas)
+node_modules/
+
+# Archivos generados por Astro
+.astro/
+dist/
+
+# Variables locales (seguridad)
+.env
+.env.production
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db

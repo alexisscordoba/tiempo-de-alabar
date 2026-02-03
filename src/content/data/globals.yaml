@@ -1,0 +1,68 @@
+# --- INFORMACIÓN LEGAL Y CRÉDITOS ---
+site_info:
+  legal: "© 2026 Tiempo de Alabar."
+  developed: "Powered by AKAE Multimedia"
+
+# --- DATOS DE CONTACTO ---
+contact_info:
+  phone: "54 9 11 4141 0645"
+  email: "tiempodealabar@gmail.com"
+  location: "Buenos Aires, Argentina"
+
+# --- LISTADO DE ENLACES (Bio, Navbar, Streaming) ---
+links:
+  # Streaming
+  - label: "Spotify"
+    url: "https://open.spotify.com/artist/1tW4Zln3imTZHPgxNMsRh2"
+    type: "streaming"
+    icon: "simple-icons:spotify"
+  - label: "Apple Music"
+    url: "https://music.apple.com/ar/artist/tiempo-de-alabar/1456053938"
+    type: "streaming"
+    icon: "simple-icons:apple-music"
+  - label: "YouTube Music"
+    url: "https://music.youtube.com/channel/UCKxBUc43jELJSO0Dqc4oQ4w"
+    type: "streaming"
+    icon: "simple-icons:youtubemusic"
+  - label: "Amazon Music"
+    url: "https://music.amazon.com/artists/B07PHV5YMT"
+    type: "streaming"
+    icon: "simple-icons:amazonmusic"
+  - label: "Deezer"
+    url: "https://www.deezer.com/es/artist/61030242"
+    type: "streaming"
+    icon: "simple-icons:deezer"
+  - label: "Tidal"
+    url: "https://tidal.com/artist/15211988"
+    type: "streaming"
+    icon: "simple-icons:tidal"
+  - label: "SoundCloud"
+    url: "https://soundcloud.com/tiempodealabar"
+    type: "streaming"
+    icon: "simple-icons:soundcloud"
+
+  # Video
+  - label: "YouTube"
+    url: "https://www.youtube.com/c/Tiempodealabar"
+    type: "video"
+    icon: "lucide:youtube"
+
+  # Social
+  - label: "Instagram"
+    url: "https://www.instagram.com/tiempodealabar/"
+    type: "social"
+    icon: "lucide:instagram"
+  - label: "Facebook"
+    url: "https://www.facebook.com/tiempodealabaroficial"
+    type: "social"
+    icon: "lucide:facebook"
+
+  # Contacto
+  - label: "WhatsApp"
+    url: "https://wa.me/5491141410645"
+    type: "contact"
+    icon: "lucide:message-circle"
+  - label: "Telegram"
+    url: "https://t.me/tiempodealabaroficial"
+    type: "contact"
+    icon: "lucide:send"
