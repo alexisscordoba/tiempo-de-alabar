@@ -1,0 +1,32 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Inicio | Tiempo de Alabar">
+	<main class="flex-grow flex flex-col items-center justify-center p-8 text-center gap-8">
+		<div class="space-y-4">
+			<h1 class="text-6xl font-bold text-primary tracking-tight">
+				Tiempo de <span class="text-secondary">Alabar</span>
+			</h1>
+			<p class="text-xl text-secondary/80 max-w-2xl mx-auto">
+				Sitio en desarrollo. Fase de inicialización completada.
+			</p>
+		</div>
+
+		<div class="flex gap-4">
+			<a href="/admin" class="px-6 py-3 bg-primary text-white rounded-lg font-semibold hover:bg-primary/90 transition shadow-lg hover:shadow-primary/50">
+				Ir al CMS
+			</a>
+		</div>
+
+		<div class="mt-12 p-6 bg-white/50 backdrop-blur-sm rounded-xl border border-white/20 shadow-sm max-w-md">
+			<h2 class="font-semibold mb-2">Estado del Stack</h2>
+			<ul class="text-sm text-left list-disc list-inside space-y-1">
+				<li>Astro 5.x: <span class="text-green-600 font-bold">Activo</span></li>
+				<li>Tailwind CSS: <span class="text-green-600 font-bold">Activo</span></li>
+				<li>React: <span class="text-green-600 font-bold">Activo</span></li>
+				<li>Decap CMS: <span class="text-green-600 font-bold">Configurado</span></li>
+			</ul>
+		</div>
+	</main>
+</Layout>

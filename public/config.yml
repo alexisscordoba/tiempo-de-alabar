@@ -1,9 +1,16 @@
 backend:
   name: github
-  repo: alexisscordoba/tiempo-de-alabar # Asegúrate de que este sea el repo final
+  repo: alexisscordoba/tiempo-de-alabar
   branch: main
-  base_url: https://auth.tiempodealabar.workers.dev # Tu Worker de autenticación
+  base_url: https://auth.tiempodealabar.workers.dev
   auth_endpoint: /auth
+
+# backend:
+#   name: git-gateway
+  
+local_backend: true
+  
+
 
 media_folder: "public/assets/system"
 public_folder: "/assets/system"
@@ -129,8 +136,8 @@ collections:
       - { label: "Evento destacado", name: "featured", widget: "boolean", default: false }
 
       # --- 2. LOGISTICA ---
-      - { label: "Fecha Inicio", name: "date", widget: "date", format: "YYYY-MM-DD" }
-      - { label: "Fecha Fin (Opcional)", name: "end_date", widget: "date", format: "YYYY-MM-DD", required: false }
+      - { label: "Fecha Inicio", name: "date", widget: "datetime", format: "YYYY-MM-DD", time_format: false }
+      - { label: "Fecha Fin (Opcional)", name: "end_date", widget: "datetime", format: "YYYY-MM-DD", time_format: false, required: false }
       - label: "Hora Inicio"
         name: "time"
         widget: "string"
@@ -183,9 +190,10 @@ collections:
                 collection: "musica"
                 search_fields: ["title"]
                 display_fields: ["title"]
+                value_field: "slug"
                 required: false
               - { label: "Nombre personalizado", name: "custom_name", widget: "string", required: false }
-          - { label: "Galería de Fotos", name: "gallery", widget: "list", field: { widget: "image" }, required: false }
+          - { label: "Galería de Fotos", name: "gallery", widget: "list", field: { label: "Imagen", name: "image", widget: "image" }, required: false }
           - { label: "Carpeta de Prensa", name: "link_promo", widget: "string", required: false }
     
       # --- 5. SEO ---
@@ -224,8 +232,8 @@ collections:
       - { label: "Orden de Aparición", name: "order", widget: "number", default: 1 }
 
       # --- 2. FECHAS ---
-      - { label: "Fecha de Inicio", name: "start_date", widget: "date", format: "YYYY-MM-DD" }
-      - { label: "Fecha de Salida", name: "end_date", widget: "date", format: "YYYY-MM-DD", required: false, hint: "Obligatorio solo para ex-integrantes" }
+      - { label: "Fecha de Inicio", name: "start_date", widget: "datetime", format: "YYYY-MM-DD", time_format: false }
+      - { label: "Fecha de Salida", name: "end_date", widget: "datetime", format: "YYYY-MM-DD", time_format: false, required: false, hint: "Obligatorio solo para ex-integrantes" }
 
       # --- 3. ROLES (Relación con la colección roles) ---
       - label: "Funciones en la Banda"
@@ -246,7 +254,7 @@ collections:
           - { label: "Descripción de la foto de perfil", name: "ph_profile_alt", widget: "string" }
           - { label: "Foto de Perfil Secundaria", name: "ph_secondary", widget: "image", hint: "Usar imagen 2:3", required: false } 
           - { label: "Descripción de la foto de perfil secundaria", name: "ph_secondary_alt", widget: "string", required: false }
-          - { label: "Galería Personal", name: "gallery", widget: "list", field: { widget: "image" }, required: false }
+          - { label: "Galería Personal", name: "gallery", widget: "list", field: { label: "Imagen", name: "image", widget: "image" }, required: false }
 
       # --- 5. BIO CORTA & SOCIAL ---
       - { label: "Bio Corta", name: "bio_short", widget: "string" }
@@ -297,7 +305,7 @@ collections:
       # --- 1. IDENTIDAD ---
       - { label: "Título del Hito", name: "title", widget: "string" }
       - { label: "Año", name: "year", widget: "number", hint: "Ej: 2024" }
-      - { label: "Fecha exacta", name: "date", widget: "date", format: "YYYY-MM-DD", required: false }
+      - { label: "Fecha exacta", name: "date", widget: "datetime", format: "YYYY-MM-DD", time_format: false, required: false }
       - { label: "Hito Destacado", name: "featured", widget: "boolean", default: false, hint: "¿Resaltar visualmente este momento en la línea de tiempo?" }
 
       # --- 2. CONFIGURACIÓN DE NAVEGACIÓN ---
@@ -314,12 +322,13 @@ collections:
         widget: "object"
         fields:
           - { label: "Imagen de Portada (Cover)", name: "cover", widget: "image", hint: "La relación de aspecto debe ser 2:3" }
-          - { label: "Galería de Fotos", name: "gallery", widget: "list", field: { widget: "image" }, required: false }
+          - { label: "Galería de Fotos", name: "gallery", widget: "list", field: { label: "Imagen", name: "image", widget: "image" }, required: false }
           - { label: "Canción vinculada", 
               name: "related_song", 
               widget: "relation", 
               collection: "musica", 
               search_fields: ["title"], 
+              value_field: "slug",
               display_fields: ["title"], 
               required: false,
               hint: "Si el hito es un lanzamiento, se vincula aquí."}
@@ -329,6 +338,7 @@ collections:
               collection: "eventos", 
               search_fields: ["title"], 
               display_fields: ["title"], 
+              value_field: "slug",
               required: false,
               hint: "Si el hito es un evento, se vincula aquí."}
 
@@ -415,6 +425,7 @@ collections:
               - { label: "Link Botón Primario", name: "cta_primary_link", widget: "string", default: "/musica" }
               - { label: "Texto Botón Secundario", name: "cta_secondary_label", widget: "string", default: "Agenda" }
               - { label: "Link Botón Secundario", name: "cta_secondary_link", widget: "string", default: "/agenda" }
+              - { label: "Texto Badge (opcional)", name: "badge_text", widget: "string", required: false, hint: "Ej: Nuevo Lanzamiento Disponible. Dejar vacío para ocultar." }
 
           # --- 2. FRASE DESTACADA ---
           - label: "Frase destacada"
@@ -423,6 +434,7 @@ collections:
             fields:
               - { label: "Mostrar esta sección", name: "active", widget: "boolean", default: true }
               - { label: "Frase", name: "text", widget: "text" }
+              - { label: "Autor", name: "author", widget: "string", required: false, hint: "Ej: Salmos 95:1" }
 
           # --- 3. CONTENIDO DESTACADO ---
           - label: "Contenido Destacado"
@@ -435,6 +447,7 @@ collections:
                 collection: "eventos"
                 search_fields: ["title"]
                 display_fields: ["title"]
+                value_field: "slug"
                 required: false
               - label: "Canción Destacada"
                 name: "song"
@@ -442,6 +455,7 @@ collections:
                 collection: "musica"
                 search_fields: ["title"]
                 display_fields: ["title"]
+                value_field: "slug"
                 required: false
 
           # --- NUESTRA MUSICA ---
@@ -705,6 +719,7 @@ collections:
                 collection: "eventos"
                 search_fields: ["title"]
                 display_fields: ["title"]
+                value_field: "slug"
               - { label: "Texto del Botón", name: "cta_label", widget: "string", default: "Ver detalles del evento" }
 
           # --- 5. SEO ---
@@ -714,3 +729,61 @@ collections:
             fields:
               - { label: "Título SEO", name: "title", widget: "string", default: "Enlaces | Tiempo de Alabar" }
               - { label: "Descripción SEO", name: "description", widget: "text" }
+              - { label: "Imagen Social (OG)", name: "og_image", widget: "image", required: false }
+
+      - label: "Música (Página)"
+        name: "musica"
+        file: "src/content/pages/musica.md"
+        fields:
+          - label: "Sección Hero"
+            name: "hero"
+            widget: "object"
+            fields:
+              - { label: "Título", name: "title", widget: "string", default: "Nuestra música" }
+              - { label: "Subtítulo", name: "subtitle", widget: "string", required: false }
+              - { label: "Imagen de fondo", name: "background", widget: "image" }
+          - label: "SEO"
+            name: "seo"
+            widget: "object"
+            fields:
+              - { label: "Título SEO", name: "title", widget: "string" }
+              - { label: "Descripción SEO", name: "description", widget: "text" }
+              - { label: "Imagen Social (OG)", name: "og_image", widget: "image" }
+
+      - label: "Agenda (Página)"
+        name: "agenda"
+        file: "src/content/pages/agenda.md"
+        fields:
+          - label: "Sección Hero"
+            name: "hero"
+            widget: "object"
+            fields:
+              - { label: "Título", name: "title", widget: "string", default: "Próximos eventos" }
+              - { label: "Subtítulo", name: "subtitle", widget: "string", required: false }
+              - { label: "Imagen de fondo", name: "background", widget: "image" }
+          - label: "SEO"
+            name: "seo"
+            widget: "object"
+            fields:
+              - { label: "Título SEO", name: "title", widget: "string" }
+              - { label: "Descripción SEO", name: "description", widget: "text" }
+              - { label: "Imagen Social (OG)", name: "og_image", widget: "image" }
+
+      - label: "Historial de Eventos"
+        name: "historial_eventos"
+        file: "src/content/pages/historial-eventos.md"
+        fields:
+          - label: "Sección Hero"
+            name: "hero"
+            widget: "object"
+            fields:
+              - { label: "Título", name: "title", widget: "string", default: "Momentos Vividos" }
+              - { label: "Subtítulo", name: "subtitle", widget: "string", required: false, default: "Un recorrido por los lugares donde hemos compartido con vos" }
+              - { label: "Imagen de fondo", name: "background", widget: "image" }
+          - label: "SEO"
+            name: "seo"
+            widget: "object"
+            fields:
+              - { label: "Título SEO", name: "title", widget: "string" }
+              - { label: "Descripción SEO", name: "description", widget: "text" }
+              - { label: "Imagen Social (OG)", name: "og_image", widget: "image" }
