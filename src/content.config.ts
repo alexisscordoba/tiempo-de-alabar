@@ -96,7 +96,7 @@ const eventos = defineCollection({
         content: z.object({
             guests: z.string().optional(),
             setlist: z.array(z.object({
-                song_id: reference('musica').optional(),
+                song_id: reference('musica').nullable().optional(),
                 custom_name: z.string().optional()
             })).optional(),
             gallery: z.array(image()).optional(),
@@ -121,7 +121,7 @@ const members = defineCollection({
         status: z.enum(['draft', 'active', 'former']).default('active'),
         order: z.number().default(1),
         start_date: z.date(),
-        end_date: z.date().optional(),
+        end_date: z.date().nullable().optional(),
 
         roles: z.array(reference('roles')).optional(),
 
@@ -170,8 +170,8 @@ const hitos = defineCollection({
         design: z.object({
             cover: image(),
             gallery: z.array(image()).optional(),
-            related_song: reference('musica').optional(),
-            related_event: reference('eventos').optional()
+            related_song: reference('musica').nullable().optional(),
+            related_event: reference('eventos').nullable().optional()
         }).optional(),
 
         summary: z.string().optional(),
@@ -241,9 +241,9 @@ const pages = defineCollection({
         identity: z.object({
             description: z.string().optional(),
             history: z.string().optional(),
-            goals: z.array(z.object({ item: z.string() })).optional()
+            goals: z.array(z.string().or(z.object({ item: z.string() }))).optional()
         }).optional(),
-        gallery: z.array(z.object({ image: z.string() })).optional(),
+        gallery: z.array(z.string().or(z.object({ image: z.string() }))).optional(),
 
         // Organizar Specific
         info: z.any().optional(),

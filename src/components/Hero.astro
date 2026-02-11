@@ -1,0 +1,129 @@
+---
+import { Play, Calendar, MousePointer2 } from "lucide-react";
+import { Image } from "astro:assets";
+
+interface Props {
+    title: string;
+    subtitle: string;
+    background: any;
+    badge_text?: string;
+    cta_primary?: { label: string; link: string };
+    cta_secondary?: { label: string; link: string };
+}
+
+const { title, subtitle, background, badge_text, cta_primary, cta_secondary } =
+    Astro.props;
+---
+
+<section
+    class="relative min-h-screen w-full flex items-center justify-center overflow-hidden"
+>
+    {/* Background Image & Overlay */}
+    <div class="absolute inset-0 z-0">
+        <Image
+            src={background}
+            alt="Hero Background"
+            class="w-full h-full object-cover"
+            quality="high"
+        />
+        <div
+            class="absolute inset-0 bg-gradient-to-b from-secondary/80 via-secondary/40 to-neutral-1"
+        >
+        </div>
+        <div class="absolute inset-0 bg-black/20"></div>
+    </div>
+
+    {/* Content Container */}
+    <div
+        class="relative z-10 max-w-7xl mx-auto px-6 pt-20 pb-32 text-center flex flex-col items-center"
+    >
+        {/* Badge */}
+        {
+            badge_text && (
+                <div class="mb-6 px-4 py-1.5 rounded-full glass-morphism text-xs font-bold text-white tracking-[0.2em] uppercase flex items-center gap-2 animate-fade-in">
+                    <span class="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                    {badge_text}
+                </div>
+            )
+        }
+
+        {/* Typography */}
+        <h1
+            class="text-5xl md:text-8xl font-black text-white tracking-tighter leading-[0.9] mb-8 max-w-4xl uppercase"
+        >
+            {
+                /* Split title by comma to create the line break mentioned in blueprint if needed, 
+          or just render as is with responsive sizing */
+            }
+            {title}
+        </h1>
+
+        <p class="text-lg md:text-xl text-white/70 font-bold max-w-2xl mb-12">
+            {subtitle}
+        </p>
+
+        {/* CTAs */}
+        <div class="flex flex-col sm:flex-row items-center gap-4">
+            {
+                cta_primary && (
+                    <a
+                        href={cta_primary.link}
+                        class="flex items-center gap-2 px-8 py-4 rounded-full bg-primary text-white font-bold transition-all hover:scale-105 hover:shadow-xl hover:shadow-primary/30 active:scale-95 group"
+                    >
+                        <Play
+                            size={20}
+                            fill="currentColor"
+                            className="group-hover:scale-110 transition-transform"
+                        />
+                        <span>{cta_primary.label}</span>
+                    </a>
+                )
+            }
+
+            {
+                cta_secondary && (
+                    <a
+                        href={cta_secondary.link}
+                        class="flex items-center gap-2 px-8 py-4 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white font-bold transition-all hover:bg-white/20 hover:scale-105 active:scale-95 group"
+                    >
+                        <Calendar
+                            size={20}
+                            className="group-hover:scale-110 transition-transform"
+                        />
+                        <span>{cta_secondary.label}</span>
+                    </a>
+                )
+            }
+        </div>
+    </div>
+
+    {/* Scroll Indicator */}
+    <div
+        class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50 animate-bounce"
+    >
+        <div
+            class="w-6 h-10 border-2 border-white rounded-full flex justify-center p-1"
+        >
+            <div class="w-1 h-2 bg-white rounded-full"></div>
+        </div>
+        <span class="text-[10px] text-white font-bold tracking-widest uppercase"
+            >Scroll</span
+        >
+    </div>
+</section>
+
+<style>
+    @keyframes fade-in {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    .animate-fade-in {
+        animation: fade-in 1s ease-out forwards;
+    }
+</style>

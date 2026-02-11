@@ -1,28 +1,71 @@
 ---
-import '../styles/global.css';
+import "../styles/global.css";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer.astro";
+import { ClientRouter } from "astro:transitions";
+import { getEntry } from "astro:content";
 
 interface Props {
 	title: string;
 }
 
 const { title } = Astro.props;
+
+const globalsEntry = await getEntry("settings", "globals");
+const streamingLinks =
+	globalsEntry?.data?.links?.filter((l: any) => l.type === "streaming") || [];
 ---
 
 <!doctype html>
 <html lang="es">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="description" content="Tiempo de Alabar - Ministerio de música" />
+		<meta
+			name="description"
+			content="Tiempo de Alabar - Ministerio de música"
+		/>
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
 		<!-- Google Fonts: Inter -->
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap"
+			rel="stylesheet"
+		/>
+
+		<ClientRouter />
 	</head>
-	<body class="bg-neutral text-secondary font-sans min-h-screen flex flex-col">
-		<slot />
+	<body
+		class="text-secondary font-sans min-h-screen flex flex-col selection:bg-primary/20 relative overflow-x-hidden"
+	>
+		{/* Background Effects */}
+		<div class="grain-overlay pointer-events-none"></div>
+
+		<div class="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+			<div
+				class="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-primary/10 rounded-full blur-[120px] animate-float-slow"
+			>
+			</div>
+			<div
+				class="absolute top-[20%] -right-[5%] w-[35%] h-[35%] bg-accent/15 rounded-full blur-[100px] animate-float-slower"
+			>
+			</div>
+			<div
+				class="absolute -bottom-[5%] left-[15%] w-[30%] h-[30%] bg-primary/5 rounded-full blur-[80px] animate-float-slow"
+			>
+			</div>
+		</div>
+
+		{/* Navbar: Client Load to enable hydration for interaction */}
+		<Navbar client:load streamingLinks={streamingLinks} />
+
+		<main class="flex-grow relative z-10">
+			<slot />
+		</main>
+
+		<Footer />
 	</body>
 </html>

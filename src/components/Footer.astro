@@ -1,0 +1,106 @@
+---
+import { Heart, Settings } from "lucide-react";
+import { getEntry } from "astro:content";
+
+// --- DATA PROCESSING ---
+const globalsEntry = await getEntry("settings", "globals");
+const globals = globalsEntry?.data;
+
+// Filter links by type
+const socialLinks =
+  globals?.links?.filter(
+    (link: any) => link.type === "social" || link.type === "video",
+  ) || [];
+const navigationLinks = [
+  { label: "Inicio", href: "/" },
+  { label: "Acerca de", href: "/acerca-de" },
+  { label: "Música", href: "/musica" },
+  { label: "Agenda", href: "/agenda" },
+  { label: "Contacto", href: "/contacto" },
+];
+---
+
+<footer
+  class="bg-gradient-to-b from-neutral-2 to-white py-12 border-t border-neutral/10 mt-auto"
+>
+  <div class="max-w-7xl mx-auto px-4 flex flex-col items-center">
+    {/* --- BRAND --- */}
+    <h2
+      class="text-3xl font-black tracking-tighter text-secondary mb-8 uppercase"
+    >
+      Tiempo de Alabar
+    </h2>
+
+    {/* --- NAVIGATION --- */}
+    <nav class="flex flex-wrap justify-center gap-6 mb-10">
+      {
+        navigationLinks.map((link) => (
+          <a
+            href={link.href}
+            class="text-secondary/70 hover:text-primary transition-colors text-xs font-bold uppercase tracking-[0.2em]"
+          >
+            {link.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    {/* --- SOCIALS --- */}
+    <div class="flex gap-6 mb-12">
+      {
+        socialLinks.map((link: any) => (
+          <a
+            href={link.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="w-10 h-10 rounded-full border border-secondary/10 flex items-center justify-center text-secondary/60 hover:text-primary hover:border-primary/30 transition-all hover:scale-110"
+            aria-label={link.label}
+          >
+            {/* Note: In a real Astro component, we'd dynamic import icons or use a map. 
+              For now keeping it simple or assuming lucide-react integration via a helper if needed.
+              Since this is .astro, we can't easily dynamic render React icons without a client wrapper 
+              OR using an Astro icon library. 
+              
+              Pending: Add 'astro-icon' or similar if dynamic icons are strictly required from YAML strings.
+              For this stage, we'll just render text or simple placeholders if icon mapping isn't set up.
+          */}
+            <span class="text-xs">{link.label.slice(0, 2)}</span>
+          </a>
+        ))
+      }
+    </div>
+
+    {/* --- ACTION BUTTONS --- */}
+    <div class="flex flex-col sm:flex-row gap-4 mb-12">
+      <a
+        href="/apoyo"
+        class="flex items-center gap-2 px-6 py-3 rounded-full bg-secondary text-white font-medium hover:bg-secondary/90 transition-transform hover:scale-[1.02] shadow-lg shadow-secondary/20 group"
+      >
+        <Heart
+          size={18}
+          className="group-hover:text-red-400 transition-colors"
+        />
+        <span>Apoyar a Tiempo de Alabar</span>
+      </a>
+
+      <a
+        href="/organizar"
+        class="flex items-center gap-2 px-6 py-3 rounded-full bg-white border border-secondary/10 text-secondary font-medium hover:bg-neutral-50 transition-transform hover:scale-[1.02] shadow-sm group"
+      >
+        <Settings
+          size={18}
+          className="group-hover:rotate-90 transition-transform duration-500"
+        />
+        <span>Organizar un evento</span>
+      </a>
+    </div>
+
+    {/* --- COPYRIGHT --- */}
+    <div
+      class="w-full border-t border-secondary/5 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-secondary/40 gap-4"
+    >
+      <p>{globals?.site_info?.legal}</p>
+      <p>{globals?.site_info?.developed}</p>
+    </div>
+  </div>
+</footer>
