@@ -37,6 +37,11 @@ Este documento rastrea el progreso del desarrollo del sitio web de "Tiempo de Al
     - [x] **Responsiveness**: Added "Tablet" breakpoint at 980px and refined mobile spacing.
     - [x] **Brand Glow**: Added organic click glow effect from logo to text.
     - [x] **Z-index & Layers**: Verified layering with Hero content.
+- [x] **Hero Component**: Fullscreen, video/imagen de fondo, badging.
+- [x] **Inspirational Section**: Bloque de citas con tipografía elegante.
+- [x] **Featured Grid**: Bento grid funcional con datos dinámicos.
+- [x] **Music Preview**: Sección de invitación a la música.
+- [x] **Integración Final**: Todas las secciones unificadas en `index.astro`.
 
 ### Fase 6: Páginas Interiores (📅 Pendiente)
 - [ ] Acerca de (Members grid, Timeline).
