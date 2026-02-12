@@ -29,11 +29,14 @@ Este documento rastrea el progreso del desarrollo del sitio web de "Tiempo de Al
 - [x] **Layout Principal:** Integración con View Transitions.
 - [x] *Walkthrough generado:* [Stage 4 Walkthrough](walkthrough-stage4.md)
 
-### Fase 5: Homepage & Hero Section (🔄 En Curso)
-- [ ] **Hero Component:** Fullscreen, video/imagen de fondo, badging.
-- [ ] **Navbar Integration:** Ajuste fino de la transición de transparencia sobre el Hero.
-- [ ] **Inspirational Section:** Bloque de citas.
-- [ ] **Featured Grid:** Bento grid para lanzamientos y eventos próximos.
+### Fase 5: Homepage & Hero Section ✅
+- [x] **Visual Polish**:
+    - [x] **Mouse-driven Reflection**: Replace automatic loop animation with mouse-following sheen/glow on both Main and Mini navbars.
+    - [x] **Transition Smoothness**: Prevent "border pop" by ensuring the border is present but transparent in the Hero state. Harmonize shadow and background fades.
+    - [x] **Fix mini-navbar transition glitch**: Decoupled glass layers to prevent nested backdrop-filter snap.
+    - [x] **Responsiveness**: Added "Tablet" breakpoint at 980px and refined mobile spacing.
+    - [x] **Brand Glow**: Added organic click glow effect from logo to text.
+    - [x] **Z-index & Layers**: Verified layering with Hero content.
 
 ### Fase 6: Páginas Interiores (📅 Pendiente)
 - [ ] Acerca de (Members grid, Timeline).
