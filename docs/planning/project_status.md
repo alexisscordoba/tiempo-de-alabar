@@ -3,8 +3,8 @@
 ## 📌 Resumen General
 Este documento rastrea el progreso del desarrollo del sitio web de "Tiempo de Alabar", siguiendo el blueprint oficial v2.0.
 
-**Estado Actual:** 🚧 En Desarrollo / Fase 5
-**Última Actualización:** 11/02/2026
+**Estado Actual:** 🚧 En Desarrollo / Fase 5 (Pulido de Homepage)
+**Última Actualización:** 12/02/2026
 
 ---
 
@@ -29,19 +29,12 @@ Este documento rastrea el progreso del desarrollo del sitio web de "Tiempo de Al
 - [x] **Layout Principal:** Integración con View Transitions.
 - [x] *Walkthrough generado:* [Stage 4 Walkthrough](walkthrough-stage4.md)
 
-### Fase 5: Homepage & Hero Section ✅
-- [x] **Visual Polish**:
-    - [x] **Mouse-driven Reflection**: Replace automatic loop animation with mouse-following sheen/glow on both Main and Mini navbars.
-    - [x] **Transition Smoothness**: Prevent "border pop" by ensuring the border is present but transparent in the Hero state. Harmonize shadow and background fades.
-    - [x] **Fix mini-navbar transition glitch**: Decoupled glass layers to prevent nested backdrop-filter snap.
-    - [x] **Responsiveness**: Added "Tablet" breakpoint at 980px and refined mobile spacing.
-    - [x] **Brand Glow**: Added organic click glow effect from logo to text.
-    - [x] **Z-index & Layers**: Verified layering with Hero content.
-- [x] **Hero Component**: Fullscreen, video/imagen de fondo, badging.
-- [x] **Inspirational Section**: Bloque de citas con tipografía elegante.
-- [x] **Featured Grid**: Bento grid funcional con datos dinámicos.
-- [x] **Music Preview**: Sección de invitación a la música.
-- [x] **Integración Final**: Todas las secciones unificadas en `index.astro`.
+### Fase 5: Homepage & Hero Section (⏳ Pulido)
+- [x] **Navbar:** Diseño y lógica 100% finalizados (Desktop/Tablet/Mobile).
+- [ ] **Hero Component:** Implementado (Funcional), pendiente pulido estético de capas y parpado.
+- [ ] **Inspirational Section:** Implementado (Funcional), pendiente refinamiento tipográfico.
+- [ ] **Featured Grid:** Implementado (Funcional), pendiente efectos hover y sincronización de vidrio.
+- [ ] **Music Preview:** Implementado (Funcional), pendiente interactividad de plataformas.
 
 ### Fase 6: Páginas Interiores (📅 Pendiente)
 - [ ] Acerca de (Members grid, Timeline).
