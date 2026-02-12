@@ -3,6 +3,9 @@ export default {
     content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
     theme: {
         extend: {
+            screens: {
+                'desktop': '980px',
+            },
             colors: {
                 primary: '#3e8d8b',
                 secondary: '#40506d',
@@ -16,7 +19,12 @@ export default {
             },
             fontFamily: {
                 sans: ['Inter', 'sans-serif'],
-            }
+                serif: ['"Playfair Display"', 'serif'],
+            },
+            animation: {
+                'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                'spin-slow': 'spin 3s linear infinite',
+            },
         },
     },
     plugins: [],

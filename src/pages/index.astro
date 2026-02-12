@@ -9,7 +9,11 @@ if (!inicio) {
 	throw new Error("No se encontró la página de inicio en el Content Layer.");
 }
 
-const { hero, seo } = inicio.data;
+import Inspirational from "../components/Inspirational.astro";
+import FeaturedGrid from "../components/FeaturedGrid.astro";
+import MusicPreview from "../components/MusicPreview.astro";
+
+const { hero, seo, quote_block, featured, musica_snippet } = inicio.data;
 ---
 
 <Layout title={seo?.title || "Inicio | Tiempo de Alabar"}>
@@ -40,5 +44,24 @@ const { hero, seo } = inicio.data;
 		)
 	}
 
-	{/* Other sections will be added here later */}
+	{/* Inspirational Quote Section */}
+	{
+		quote_block?.active && quote_block.text && (
+			<Inspirational text={quote_block.text} author="Salmos 33:2" />
+		)
+	}
+
+	{/* Featured Content Grid (Bento) */}
+	{featured && <FeaturedGrid featured={featured} />}
+
+	{/* Music Preview Section */}
+	{
+		musica_snippet && (
+			<MusicPreview
+				title={musica_snippet.title}
+				text={musica_snippet.text}
+				buttonLabel={musica_snippet.button_label}
+			/>
+		)
+	}
 </Layout>

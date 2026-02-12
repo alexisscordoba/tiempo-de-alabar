@@ -1,0 +1,104 @@
+---
+import { Play } from "lucide-react";
+interface Props {
+    title: string;
+    text: string;
+    buttonLabel: string;
+}
+
+const { title, text, buttonLabel } = Astro.props; // Should match usage in index.astro
+---
+
+<section class="relative py-20 bg-secondary overflow-hidden">
+    {/* Background Pattern */}
+    <div class="absolute inset-0 z-0 opacity-10">
+        <div
+            class="absolute -right-20 -top-20 w-[600px] h-[600px] rounded-full border-[60px] border-white/20 blur-3xl"
+        >
+        </div>
+        <div
+            class="absolute -left-20 bottom-0 w-[400px] h-[400px] rounded-full bg-primary blur-[100px]"
+        >
+        </div>
+    </div>
+
+    <div
+        class="relative z-10 max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-12"
+    >
+        {/* Text Content */}
+        <div class="flex-1 text-center md:text-left">
+            <h2
+                class="text-3xl md:text-5xl font-black text-white mb-6 leading-tight tracking-tighter"
+            >
+                {title}
+            </h2>
+            <p class="text-lg text-white/70 mb-8 max-w-xl leading-relaxed">
+                {text}
+            </p>
+
+            <div class="flex flex-wrap gap-4 justify-center md:justify-start">
+                <a
+                    href="/musica"
+                    class="inline-flex items-center gap-3 px-8 py-4 bg-primary text-white rounded-full font-bold hover:bg-white hover:text-secondary transition-all transform hover:scale-105 shadow-xl shadow-primary/20 group"
+                >
+                    <span>{buttonLabel}</span>
+                    <div
+                        class="w-8 h-8 rounded-full bg-white/20 group-hover:bg-secondary/10 flex items-center justify-center transition-colors"
+                    >
+                        <Play
+                            size={16}
+                            fill="currentColor"
+                            className="ml-0.5"
+                        />
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        {/* Visual Element / Platforms */}
+        <div class="flex-1 flex justify-center md:justify-end">
+            <div
+                class="relative w-full max-w-md aspect-square md:aspect-video bg-white/5 backdrop-blur-lg rounded-3xl border border-white/10 p-8 flex flex-col items-center justify-center gap-6 shadow-2xl rotate-3 hover:rotate-0 transition-transform duration-500"
+            >
+                <div
+                    class="text-white/40 text-sm uppercase tracking-widest mb-2 font-bold"
+                >
+                    Disponible en
+                </div>
+
+                <div
+                    class="grid grid-cols-2 gap-8 w-full place-items-center opacity-80"
+                >
+                    {
+                        /* Simple Placeholders for Platform Logos - real implementation would use SVGs */
+                    }
+                    <div
+                        class="text-2xl font-bold text-white hover:text-[#1DB954] transition-colors cursor-pointer"
+                    >
+                        Spotify
+                    </div>
+                    <div
+                        class="text-2xl font-bold text-white hover:text-[#FA243C] transition-colors cursor-pointer"
+                    >
+                        Apple Music
+                    </div>
+                    <div
+                        class="text-2xl font-bold text-white hover:text-[#FF0000] transition-colors cursor-pointer"
+                    >
+                        YouTube
+                    </div>
+                    <div
+                        class="text-2xl font-bold text-white hover:text-[#A238FF] transition-colors cursor-pointer"
+                    >
+                        Deezer
+                    </div>
+                </div>
+
+                <div
+                    class="absolute -bottom-6 -right-6 w-24 h-24 bg-accent/20 rounded-full blur-xl z-[-1]"
+                >
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

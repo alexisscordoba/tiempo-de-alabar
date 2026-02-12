@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Play, Music, Calendar, Info, Mail, Heart, HandHelping } from 'lucide-react';
-import { clsx, type ClassValue } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+import { cn } from '../lib/utils';
 
-// --- Utility Functions ---
-function cn(...inputs: ClassValue[]) {
-    return twMerge(clsx(inputs));
-}
+
 
 import StreamingModal from './StreamingModal';
 
@@ -38,6 +34,13 @@ export default function Navbar({ streamingLinks = [] }: Props) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [showMobileNav, setShowMobileNav] = useState(true);
     const [lastScrollY, setLastScrollY] = useState(0);
+
+    const [logoGlow, setLogoGlow] = useState(false);
+    const handleLogoClick = () => {
+        if (isScrolled) return;
+        setLogoGlow(true);
+        setTimeout(() => setLogoGlow(false), 600);
+    };
 
     const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
     const handleMouseMove = (e: React.MouseEvent) => {
@@ -86,45 +89,79 @@ export default function Navbar({ streamingLinks = [] }: Props) {
          ========================================= */}
             <nav
                 className={cn(
-                    "hidden md:flex fixed top-0 left-0 right-0 z-50 justify-center items-center px-8 transition-all duration-700 ease-in-out",
+                    "hidden md:flex fixed top-0 left-0 right-0 z-50 justify-center items-center px-4 desktop:px-8 transition-all duration-1000 [transition-timing-function:cubic-bezier(0.4,0,0.2,1)]",
                     isScrolled ? "py-2" : "py-5"
                 )}
             >
                 <div
                     onMouseMove={handleMouseMove}
                     className={cn(
-                        "flex items-center transition-all duration-700 ease-in-out rounded-full gap-20 py-1.5 relative group overflow-hidden",
-                        isScrolled
-                            ? "bg-gradient-to-r from-black/20 via-white/5 to-black/20 backdrop-blur-2xl shadow-lg border border-white/10 px-6 py-1"
-                            : "bg-transparent px-8 py-1.5"
+                        "flex items-center transition-all duration-1000 [transition-timing-function:cubic-bezier(0.4,0,0.2,1)] rounded-full gap-4 desktop:gap-20 py-1.5 relative group overflow-hidden",
+                        isScrolled ? "px-4 desktop:px-6 py-1" : "px-5 desktop:px-8 py-1.5"
                     )}
                 >
+                    {/* Independent Glass Background Layer */}
+                    <div className={cn(
+                        "absolute inset-0 -z-10 transition-all duration-1000 [transition-timing-function:cubic-bezier(0.4,0,0.2,1)] rounded-full",
+                        isScrolled
+                            ? "bg-white/40 backdrop-blur-2xl shadow-lg border border-white/20"
+                            : "bg-transparent border border-transparent shadow-none backdrop-blur-[0px]"
+                    )} />
+
                     {/* Mouse Glow (General Navbar) */}
                     <div
                         className="pointer-events-none absolute -inset-px opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-0"
                         style={{
-                            background: `radial-gradient(600px circle at ${mousePos.x}px ${mousePos.y}px, rgba(255,255,255,0.06), transparent 40%)`
+                            background: `radial-gradient(600px circle at ${mousePos.x}px ${mousePos.y}px, rgba(255,255,255,0.12), transparent 40%)`
                         }}
                     />
                     {/* Left: Logo + Text */}
-                    <div className="flex items-center gap-2.5 shrink-0">
-                        <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white text-sm font-bold shadow-lg shadow-primary/20">
+                    <div className="flex items-center gap-2.5 shrink-0 select-none" draggable={false}>
+                        <div
+                            onClick={handleLogoClick}
+                            className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white text-sm font-bold shadow-lg shadow-primary/20 cursor-pointer transition-all duration-300 active:shadow-[0_0_18px_rgba(62,141,139,0.6)] active:scale-95"
+                        >
                             ♫
                         </div>
-                        <span className="font-black text-lg tracking-tighter text-white transition-colors">
-                            Alabar
+                        <span
+                            className={cn(
+                                "font-black text-lg tracking-tighter flex items-baseline whitespace-nowrap pointer-events-none transition-all duration-500",
+                                isScrolled ? "text-secondary" : "text-white"
+                            )}
+                            style={{
+                                textShadow: logoGlow && !isScrolled
+                                    ? '0 0 12px rgba(62,141,139,0.7), 0 0 24px rgba(62,141,139,0.3)'
+                                    : '0 0 0px transparent',
+                                transform: logoGlow && !isScrolled ? 'translateX(2px)' : 'translateX(0)',
+                            }}
+                        >
+                            <span
+                                className="inline-block overflow-hidden transition-all duration-700 [transition-timing-function:cubic-bezier(0.4,0,0.2,1)]"
+                                style={{
+                                    maxWidth: isScrolled ? '0px' : '7em',
+                                    opacity: isScrolled ? 0 : 1,
+                                }}
+                            >
+                                Tiempo de{'\u00A0'}
+                            </span>
+                            <span className="italic">Alabar</span>
                         </span>
                     </div>
 
                     {/* Center: Navigation Links (Inner Pill) */}
                     <div className={cn(
-                        "flex items-center gap-0.5 p-0.5 rounded-full border transition-all duration-500 relative group/mini overflow-hidden",
+                        "flex items-center gap-0.5 p-0.5 rounded-full border transition-all duration-1000 [transition-timing-function:cubic-bezier(0.4,0,0.2,1)] relative group/mini overflow-hidden backdrop-blur-md",
                         isScrolled
-                            ? "bg-white/70 backdrop-blur-md border-white/30 shadow-sm"
-                            : "bg-black/20 border-white/10 backdrop-blur-md"
+                            ? "bg-white/50 border-white/40 shadow-sm"
+                            : "bg-white/0 border-white/30 shadow-none"
                     )}>
-                        {/* Shine Effect (Mini Navbar) */}
-                        <div className="absolute inset-0 translate-x-[-100%] group-hover/mini:animate-shine z-0 pointer-events-none bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+                        {/* Mouse-driven Reflection (Mini Navbar) */}
+                        <div
+                            className="pointer-events-none absolute inset-0 opacity-0 group-hover/mini:opacity-100 transition-opacity duration-500 z-0"
+                            style={{
+                                background: `radial-gradient(150px circle at ${mousePos.x - 200}px ${mousePos.y}px, rgba(255,255,255,0.15), transparent 80%)`
+                            }}
+                        />
                         {NAV_LINKS.map((link) => {
                             // Simple active logic for demo / implementation
                             // In a full Astro app, you'd use current path
@@ -135,7 +172,7 @@ export default function Navbar({ streamingLinks = [] }: Props) {
                                     key={link.label}
                                     href={link.href}
                                     className={cn(
-                                        "px-4 py-1.5 rounded-full text-[10px] font-bold tracking-[0.15em] transition-all duration-300 relative group overflow-hidden",
+                                        "px-2.5 desktop:px-4 py-1.5 rounded-full text-[10px] font-black tracking-[0.05em] transition-all duration-300 relative group/link overflow-hidden",
                                         isActive
                                             ? "text-white shadow-md shadow-primary/20"
                                             : isScrolled ? "text-secondary/70 hover:text-secondary" : "text-white/80 hover:text-white"
@@ -152,7 +189,10 @@ export default function Navbar({ streamingLinks = [] }: Props) {
 
                                     {/* Hover Underline / Glow placeholder */}
                                     {!isActive && (
-                                        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-primary/40 group-hover:w-1/3 transition-all duration-300" />
+                                        <div className={cn(
+                                            "absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 transition-all duration-300 group-hover/link:w-1/3",
+                                            isScrolled ? "bg-primary/40" : "bg-white/80"
+                                        )} />
                                     )}
                                 </a>
                             );
@@ -165,9 +205,8 @@ export default function Navbar({ streamingLinks = [] }: Props) {
                             onClick={() => setIsModalOpen(true)}
                             className={cn(
                                 "w-9 h-9 rounded-full flex items-center justify-center transition-all duration-300 shadow-xl hover:scale-110 active:scale-95 group",
-                                isScrolled
-                                    ? "bg-primary text-white"
-                                    : "bg-white text-secondary"
+                                "bg-primary text-white",
+                                !isScrolled && "border border-white/20"
                             )}
                         >
                             <Play size={16} fill="currentColor" className="ml-0.5 group-hover:scale-110 transition-transform" />
@@ -178,14 +217,7 @@ export default function Navbar({ streamingLinks = [] }: Props) {
 
             <style dangerouslySetInnerHTML={{
                 __html: `
-                @keyframes shine {
-                    100% {
-                        transform: translateX(100%);
-                    }
-                }
-                .group-hover\\/mini\\:animate-shine {
-                    animation: shine 1.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-                }
+                /* Removed looping shine animation */
             `}} />
 
             <StreamingModal

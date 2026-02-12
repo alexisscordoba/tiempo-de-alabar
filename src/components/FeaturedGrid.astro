@@ -1,0 +1,295 @@
+---
+import { getEntry } from "astro:content";
+import { Image } from "astro:assets";
+import {
+    Calendar,
+    MapPin,
+    Music,
+    Play,
+    Settings,
+    ArrowRight,
+} from "lucide-react";
+import { cn } from "../lib/utils";
+
+interface Props {
+    featured: {
+        song?: string;
+        event?: string;
+    };
+}
+
+const { featured } = Astro.props;
+
+// Fetch Data
+const songEntry = featured?.song
+    ? await getEntry("musica", featured.song)
+    : null;
+const eventEntry = featured?.event
+    ? await getEntry("eventos", featured.event)
+    : null;
+
+const song = songEntry?.data;
+const event = eventEntry?.data;
+
+// Formatting
+const formatDate = (date: Date) => {
+    return new Intl.DateTimeFormat("es-AR", {
+        day: "numeric",
+        month: "long",
+    }).format(date);
+};
+---
+
+<section class="max-w-7xl mx-auto px-6 py-20">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[400px]">
+        {/* --- CARD 1: NEW RELEASE (Large, 2 columns) --- */}
+        <div
+            class={cn(
+                "group relative md:col-span-2 rounded-[2rem] overflow-hidden shadow-2xl transition-all duration-500 hover:shadow-primary/20",
+                !song && "hidden md:block bg-neutral-1", // Fallback style
+            )}
+        >
+            {
+                song ? (
+                    <>
+                        {/* Background Image / Cover Art - Blurry */}
+                        <div class="absolute inset-0">
+                            {song.design?.coverart && (
+                                <Image
+                                    src={song.design.coverart}
+                                    alt={
+                                        song.design.coverart_alt || "Cover Art"
+                                    }
+                                    class="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700"
+                                />
+                            )}
+                            <div class="absolute inset-0 bg-secondary/80 mix-blend-multiply" />
+                            <div class="absolute inset-0 bg-gradient-to-t from-secondary via-transparent to-transparent" />
+                        </div>
+
+                        {/* Content */}
+                        <div class="relative z-10 h-full flex flex-col justify-end p-10">
+                            {/* Badge */}
+                            <div class="absolute top-8 left-8">
+                                <span class="px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs font-bold uppercase tracking-wider shadow-lg">
+                                    Nuevo Lanzamiento
+                                </span>
+                            </div>
+
+                            {/* Song Info */}
+                            <div class="flex items-end gap-8">
+                                {/* Cover Art (Small) */}
+                                <div
+                                    class={cn(
+                                        "hidden md:block w-40 h-40 rounded-2xl shadow-2xl overflow-hidden border border-white/10 shrink-0 transform group-hover:-translate-y-4 transition-transform duration-500",
+                                        song.design?.coverart
+                                            ? "bg-neutral-800"
+                                            : "bg-neutral-800 flex items-center justify-center",
+                                    )}
+                                >
+                                    {song.design?.coverart ? (
+                                        <Image
+                                            src={song.design.coverart}
+                                            alt={
+                                                song.design.coverart_alt ||
+                                                "Cover Art"
+                                            }
+                                            class="w-full h-full object-cover"
+                                        />
+                                    ) : (
+                                        <Music
+                                            size={40}
+                                            className="text-white/20"
+                                        />
+                                    )}
+                                </div>
+
+                                <div class="flex-1">
+                                    <h3 class="text-4xl md:text-5xl font-black text-white mb-2 tracking-tight group-hover:text-primary transition-colors">
+                                        {song.title}
+                                    </h3>
+                                    <p class="text-white/60 text-lg mb-6 line-clamp-2">
+                                        {song.description ||
+                                            "Disponible en todas las plataformas digitales."}
+                                    </p>
+
+                                    <div class="flex gap-4">
+                                        <a
+                                            href={`/musica/${songEntry?.id}`}
+                                            class="px-6 py-3 rounded-full bg-white text-secondary font-bold flex items-center gap-2 hover:bg-primary hover:text-white transition-colors shadow-lg shadow-black/20"
+                                        >
+                                            <Play
+                                                size={18}
+                                                fill="currentColor"
+                                            />
+                                            <span>Escuchar ahora</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </>
+                ) : (
+                    <div class="flex items-center justify-center h-full text-secondary/30">
+                        <span class="text-lg font-bold">
+                            Próximamente más música
+                        </span>
+                    </div>
+                )
+            }
+        </div>
+
+        {/* --- CARD 2: NEXT EVENT (1 column, top) --- */}
+        <div
+            class="relative group rounded-[2rem] overflow-hidden bg-neutral-1 border border-neutral-200 shadow-xl hover:border-primary/30 transition-all duration-300"
+        >
+            {
+                event ? (
+                    <>
+                        {/* Event Image */}
+                        <div class="absolute inset-0 h-1/2">
+                            {event.cover ? (
+                                <Image
+                                    src={event.cover}
+                                    alt={event.cover_alt || event.title}
+                                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                                />
+                            ) : (
+                                <div class="w-full h-full bg-secondary/10 flex items-center justify-center">
+                                    <Calendar
+                                        size={48}
+                                        className="text-secondary/20"
+                                    />
+                                </div>
+                            )}
+                            <div class="absolute inset-0 bg-gradient-to-b from-transparent to-neutral-1" />
+                        </div>
+
+                        <div class="absolute inset-0 flex flex-col justify-end p-8">
+                            <div class="mb-auto mt-6 flex justify-between items-start">
+                                <span class="px-3 py-1 rounded-full bg-white/80 backdrop-blur-md text-secondary text-[10px] font-bold uppercase tracking-wider shadow-sm">
+                                    Próximo Evento
+                                </span>
+                            </div>
+
+                            <div class="bg-white/60 backdrop-blur-xl p-6 rounded-2xl border border-white/50 shadow-inner">
+                                <div class="flex items-center gap-2 text-primary font-bold text-sm mb-1 uppercase tracking-wide">
+                                    <Calendar size={14} />
+                                    {formatDate(event.date)}
+                                </div>
+                                <h3 class="text-2xl font-black text-secondary leading-tight mb-3 group-hover:text-primary transition-colors">
+                                    {event.title}
+                                </h3>
+                                <div class="flex items-center gap-2 text-secondary/60 text-sm mb-4">
+                                    <MapPin size={14} />
+                                    <span>{event.location.name}</span>
+                                </div>
+
+                                <a
+                                    href={`/eventos/${eventEntry?.id}`}
+                                    class="w-full py-3 rounded-xl border border-secondary/10 flex items-center justify-center gap-2 text-secondary font-bold hover:bg-secondary hover:text-white transition-all group/btn"
+                                >
+                                    <span>Ver detalles</span>
+                                    <ArrowRight
+                                        size={16}
+                                        className="group-hover/btn:translate-x-1 transition-transform"
+                                    />
+                                </a>
+                            </div>
+                        </div>
+                    </>
+                ) : (
+                    <div class="flex flex-col items-center justify-center h-full gap-4 text-center p-8">
+                        <Calendar size={48} className="text-secondary/20" />
+                        <p class="text-secondary/50 font-medium">
+                            No hay eventos póximos
+                        </p>
+                        <a
+                            href="/agenda"
+                            class="text-primary font-bold hover:underline"
+                        >
+                            Ver historial
+                        </a>
+                    </div>
+                )
+            }
+        </div>
+
+        {
+            /* --- CARD 3: ORGANIZE (1 column, bottom - reused logic from logic but placed in grid flow) --- */
+        }
+        {
+            /* Actually, if we want 3 columns total width, and 1st card takes 2 cols, we have 1 col left.
+            The Bento Grid usually implies stacking. 
+            If I put Card 2 in col-3 row-1.
+            Where does Card 3 go? 
+            Rows are auto-rows-[400px].
+            
+            Option A: Card 1 is (col-span-2, row-span-1). Card 2 is (col-span-1, row-span-1).
+            We need another row for Card 3? Or Card 3 should be something else?
+            
+            The Blueprint says: "Layout tipo Bento Grid con dos cards principales ... Card 'Organizar evento'".
+            
+            If I want a nice layout:
+             Row 1: [ Song (2/3) ] [ Event (1/3) ]
+             Row 2: [ Organize (3/3) ] or [ Organize (1/3) ] [ ... ]
+            
+            Let's make Organize a smaller card or a banner?
+            Or maybe Card 1 is tall (row-span-2)?
+            
+            Let's stick to a simple 3-element grid.
+            Phone: Stacked.
+            Tablet/Desktop:
+             [ Song (2) ] [ Event (1) ]
+             [ Organize (3) ] -> This might be too big.
+
+            Alternative:
+             [ Song (2 cols, 1 row) ] [ Event (1 col, 2 rows) ?? ] 
+             [ Organize (2 cols, 1 row) ] 
+            
+            Let's try:
+            Grid cols 3.
+            Song: col-span-2.
+            Event: col-span-1.
+            Organize: Wait, I can make a 4th card "Music" or something?
+            
+            Actually, let's make the Organize card separate below or part of the grid.
+            If I make Organize col-span-3 (full width) it acts as a banner.
+        */
+        }
+
+        <div
+            class="md:col-span-3 rounded-[2rem] bg-gradient-to-r from-secondary to-[#2a3855] p-10 flex flex-col md:flex-row items-center justify-between gap-8 text-white relative overflow-hidden group"
+        >
+            {/* Texture */}
+            <div
+                class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]"
+            >
+            </div>
+
+            <div class="relative z-10 md:w-2/3">
+                <h3 class="text-3xl font-black mb-2 flex items-center gap-3">
+                    <Settings
+                        className="animate-spin-slow group-hover:rotate-90 transition-transform duration-700"
+                        size={32}
+                    />
+                    ¿Quieres organizar un evento?
+                </h3>
+                <p class="text-white/60 text-lg">
+                    Llevamos nuestra música y mensaje a tu iglesia o ciudad.
+                    Consulta disponibilidad y requisitos técnicos.
+                </p>
+            </div>
+
+            <div class="relative z-10">
+                <a
+                    href="/organizar"
+                    class="px-8 py-4 bg-white text-secondary rounded-full font-bold hover:bg-primary hover:text-white transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1 inline-flex items-center gap-2"
+                >
+                    <span>Contactar ahora</span>
+                    <ArrowRight size={20} />
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
