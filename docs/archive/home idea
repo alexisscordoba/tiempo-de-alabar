@@ -1,0 +1,826 @@
+import React, { useState, useEffect, useRef } from 'react';
+import {
+  Calendar,
+  ChevronRight,
+  Music,
+  Instagram,
+  Facebook,
+  Youtube,
+  Heart,
+  Settings,
+  X,
+  ExternalLink,
+  MapPin,
+  Clock,
+  ArrowDown,
+  Sparkles,
+  Users,
+  Mic2,
+  Menu,
+  Quote
+} from 'lucide-react';
+
+// --- Icono de Play Redondeado ---
+const RoundedPlayIcon = ({ size = 20, fill = "currentColor", className = "" }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill={fill}
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+  >
+    <path
+      d="M18.6603 10.3397C19.9936 11.1095 19.9936 13.0337 18.6603 13.8035L8.52564 19.6545C7.19231 20.4243 5.52564 19.4622 5.52564 17.9226L5.52564 6.22055C5.52564 4.68095 7.19231 3.71887 8.52564 4.48867L18.6603 10.3397Z"
+      stroke={fill}
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+// --- Componente de Botón Interactivo Moderno ---
+const InteractiveButton = ({ children, onClick, variant = 'primary', icon: Icon }) => {
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [isHovered, setIsHovered] = useState(false);
+  const buttonRef = useRef(null);
+
+  const handleMouseMove = (e) => {
+    if (!buttonRef.current) return;
+    const rect = buttonRef.current.getBoundingClientRect();
+    setMousePos({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top
+    });
+  };
+
+  const baseStyles = "relative group px-8 py-4 rounded-full font-black uppercase tracking-widest text-xs transition-all duration-500 ease-out overflow-hidden flex items-center justify-center gap-3 active:scale-95 shadow-xl hover:-translate-y-1 w-full sm:w-auto";
+
+  const variants = {
+    primary: "bg-[#3e8d8b] text-white hover:shadow-[0_20px_40px_rgba(62,141,139,0.4)]",
+    secondary: "bg-white/10 backdrop-blur-xl border border-white/30 text-white hover:bg-white/15 hover:shadow-[0_20px_40_rgba(0,0,0,0.2)]"
+  };
+
+  return (
+    <button
+      ref={buttonRef}
+      onClick={onClick}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className={`${baseStyles} ${variants[variant]}`}
+    >
+      <div
+        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-0"
+        style={{
+          background: `radial-gradient(100px circle at ${mousePos.x}px ${mousePos.y}px, ${variant === 'primary' ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.15)'}, transparent 80%)`
+        }}
+      />
+      <div className="relative z-10 flex items-center gap-3">
+        {Icon && <Icon size={18} className="transition-transform duration-500 group-hover:scale-110" />}
+        {children}
+      </div>
+    </button>
+  );
+};
+
+// --- Componente de Revelado ---
+const Reveal = ({ children, delay = 0 }) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) setIsVisible(true); },
+      { threshold: 0.1 }
+    );
+    if (ref.current) observer.observe(ref.current);
+    const timer = setTimeout(() => setIsVisible(true), 1000);
+    return () => {
+      if (ref.current) observer.unobserve(ref.current);
+      clearTimeout(timer);
+    };
+  }, []);
+
+  return (
+    <div
+      ref={ref}
+      style={{ transitionDelay: `${delay}ms` }}
+      className={`transition-all duration-1000 ease-out ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+    >
+      {children}
+    </div>
+  );
+};
+
+// --- Hero Featured Badge Component ---
+const HeroFeaturedBadge = ({ text }) => {
+  const badgeRef = useRef(null);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseMove = (e) => {
+    if (!badgeRef.current) return;
+    const rect = badgeRef.current.getBoundingClientRect();
+    setMousePos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+  };
+
+  return (
+    <div
+      ref={badgeRef}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => {
+        setIsHovered(false);
+        setMousePos({ x: 0, y: 0 });
+      }}
+      className="relative hidden lg:inline-flex items-center gap-3 px-6 py-2.5 bg-white/5 backdrop-blur-md rounded-full text-white text-[10px] font-black uppercase tracking-[0.4em] mb-6 shadow-2xl cursor-default transition-all duration-300 ease-out overflow-hidden group border border-white/10"
+    >
+      <div
+        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+        style={{
+          background: `radial-gradient(120px circle at ${mousePos.x}px ${mousePos.y}px, rgba(216, 200, 225, 0.25), transparent 80%)`
+        }}
+      />
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full animate-shimmer pointer-events-none" />
+      <Sparkles
+        size={16}
+        className={`text-[#d8c8e1] transition-transform duration-500 ${isHovered ? 'rotate-45 scale-125' : 'animate-pulse'}`}
+      />
+      <span className="relative z-10 drop-shadow-sm">{text}</span>
+      <div
+        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-full border border-[#3e8d8b]/50 pointer-events-none"
+        style={{
+          maskImage: `radial-gradient(80px circle at ${mousePos.x}px ${mousePos.y}px, black, transparent)`
+        }}
+      />
+    </div>
+  );
+};
+
+// --- Fondo de Orbes ---
+const FloatingOrbs = () => (
+  <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+    <div className="absolute top-[10%] left-[-10%] w-[500px] h-[500px] bg-[#3e8d8b]/20 rounded-full blur-[120px] animate-float" />
+    <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-[#d8c8e1]/15 rounded-full blur-[140px] animate-float-rev" />
+  </div>
+);
+
+const Navbar = ({ onOpenStreaming }) => {
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showExtraUI, setShowExtraUI] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const [scrollPosAtOpen, setScrollPosAtOpen] = useState(0);
+  const [navHovered, setNavHovered] = useState(false);
+  const [hoverStyle, setHoverStyle] = useState({ opacity: 0, width: 0, left: 0, x: 0, y: 0 });
+
+  const scrollUpAccumulator = useRef(0);
+  const scrollDownAccumulator = useRef(0);
+  const navRef = useRef(null);
+  const mobileMenuRef = useRef(null);
+
+  // Manejar cierre al hacer clic fuera
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target)) {
+        setMobileMenuOpen(false);
+      }
+    };
+
+    if (mobileMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('touchstart', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
+  }, [mobileMenuOpen]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      const scrollDiff = currentScrollY - lastScrollY;
+
+      setScrolled(currentScrollY > 40);
+
+      // Lógica de mostrar/ocultar UI extra
+      if (scrollDiff > 0) {
+        scrollDownAccumulator.current += scrollDiff;
+        scrollUpAccumulator.current = 0;
+        if (scrollDownAccumulator.current > 80 && currentScrollY > 60) {
+          setShowExtraUI(false);
+        }
+      } else {
+        scrollUpAccumulator.current += Math.abs(scrollDiff);
+        scrollDownAccumulator.current = 0;
+        if (scrollUpAccumulator.current > 120 || currentScrollY < 20) {
+          setShowExtraUI(true);
+        }
+      }
+
+      // Lógica de cierre del menú por scroll
+      if (mobileMenuOpen) {
+        const diffFromOpen = Math.abs(currentScrollY - scrollPosAtOpen);
+        if (diffFromOpen > 250) {
+          setMobileMenuOpen(false);
+        }
+      }
+
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY, mobileMenuOpen, scrollPosAtOpen]);
+
+  const toggleMobileMenu = () => {
+    if (!mobileMenuOpen) {
+      setScrollPosAtOpen(window.scrollY);
+    }
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
+
+  const handleMouseEnterItem = (e) => {
+    const { offsetLeft, offsetWidth } = e.currentTarget;
+    setHoverStyle(prev => ({
+      ...prev,
+      opacity: 1,
+      width: offsetWidth,
+      left: offsetLeft
+    }));
+  };
+
+  const handleMouseMove = (e) => {
+    if (!navRef.current) return;
+    const rect = navRef.current.getBoundingClientRect();
+    setHoverStyle(prev => ({
+      ...prev,
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top
+    }));
+  };
+
+  const handleMouseLeave = () => {
+    setHoverStyle(prev => ({ ...prev, opacity: 0 }));
+    setNavHovered(false);
+  };
+
+  const textColor = scrolled ? 'text-[#40506d]' : 'text-white';
+  const links = [
+    { name: 'Inicio', href: '#inicio' },
+    { name: 'Acerca de', href: '#acerca-de' },
+    { name: 'Música', href: '#música' },
+    { name: 'Agenda', href: '#agenda' },
+    { name: 'Contacto', href: '#contacto' }
+  ];
+
+  return (
+    <>
+      <nav
+        ref={navRef}
+        onMouseMove={handleMouseMove}
+        onMouseEnter={() => setNavHovered(true)}
+        onMouseLeave={handleMouseLeave}
+        className={`fixed top-6 left-1/2 -translate-x-1/2 z-[60] hidden min-[800px]:flex items-center justify-between transition-all duration-500 ease-out rounded-full border shadow-2xl overflow-hidden
+          ${scrolled
+            ? 'bg-white/80 border-white/40 py-2.5 px-6 w-[92%] max-w-7xl backdrop-blur-xl'
+            : 'bg-white/10 border-white/10 py-3 px-8 w-[92%] max-w-7xl backdrop-blur-md'
+          }
+        `}
+      >
+        <div
+          className="absolute inset-0 pointer-events-none transition-opacity duration-500 z-0"
+          style={{
+            opacity: navHovered ? 1 : 0,
+            background: `radial-gradient(150px circle at ${hoverStyle.x}px ${hoverStyle.y}px, ${scrolled ? 'rgba(62, 141, 139, 0.1)' : 'rgba(255, 255, 255, 0.12)'}, transparent 80%)`
+          }}
+        />
+
+        <div className="relative z-10 flex items-center gap-3 group cursor-pointer shrink-0">
+          <div className="w-10 h-10 bg-gradient-to-tr from-[#3e8d8b] to-[#40506d] rounded-full flex items-center justify-center shadow-lg group-hover:rotate-[360deg] transition-transform duration-1000">
+            <Music className="text-white" size={18} />
+          </div>
+          <span className={`font-black text-xl tracking-tighter transition-colors duration-500 hidden sm:block ${textColor}`}>
+            Alabar<span className="text-[#3e8d8b]">.</span>
+          </span>
+        </div>
+
+        <div className="relative z-10 flex items-center justify-center flex-1 px-4">
+          <div className="relative flex items-center bg-black/5 rounded-full p-1 border border-white/5">
+            <div
+              className="absolute h-9 bg-[#3e8d8b] rounded-full transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] z-0 shadow-lg pointer-events-none overflow-hidden"
+              style={{
+                left: `${hoverStyle.left}px`,
+                width: `${hoverStyle.width}px`,
+                opacity: hoverStyle.opacity
+              }}
+            >
+              <div
+                className="absolute inset-0 transition-opacity duration-300"
+                style={{
+                  background: `radial-gradient(80px circle at ${hoverStyle.x - (navRef.current?.getBoundingClientRect().width / 2 - 150)}px ${hoverStyle.y}px, rgba(255,255,255,0.35), transparent 80%)`
+                }}
+              />
+            </div>
+
+            {links.map((link) => (
+              <a
+                key={link.name}
+                href={link.href}
+                onMouseEnter={handleMouseEnterItem}
+                className={`relative px-5 py-2 text-[10px] font-black uppercase tracking-widest transition-colors duration-300 z-10 whitespace-nowrap ${textColor} hover:text-white rounded-full`}
+              >
+                {link.name}
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <div className="relative z-10 shrink-0">
+          <button
+            onClick={onOpenStreaming}
+            className="group w-10 h-10 bg-[#3e8d8b] rounded-full flex items-center justify-center text-white shadow-xl hover:scale-110 active:scale-95 transition-all relative overflow-hidden"
+          >
+            <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+            <RoundedPlayIcon size={16} fill="white" className="ml-0.5 relative z-10" />
+          </button>
+        </div>
+      </nav>
+
+      {/* --- MOBILE NAVBAR --- */}
+      <div className="fixed top-6 left-0 right-0 z-[60] flex items-center justify-between px-6 min-[800px]:hidden pointer-events-none h-16">
+        <div
+          className={`
+            pointer-events-auto relative flex items-center h-16 rounded-full border shadow-xl backdrop-blur-xl 
+            transition-[width,background-color,border-color,opacity,transform] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] origin-left p-1.5
+            ${scrolled ? 'bg-white/50 border-white/20' : 'bg-white/15 border-white/10'}
+            ${mobileMenuOpen ? 'opacity-0 -translate-x-10 pointer-events-none' : 'opacity-100 translate-x-0'}
+            ${showExtraUI ? 'w-[132px]' : 'w-16'}
+          `}
+        >
+          <div
+            className={`
+              w-13 h-13 bg-gradient-to-tr from-[#3e8d8b] to-[#40506d] rounded-full flex items-center justify-center shrink-0 shadow-lg z-20 
+              transform-gpu translate-z-0 backface-hidden transition-all duration-300 ease-in-out
+              ${mobileMenuOpen ? 'scale-0 rotate-45 opacity-0' : 'scale-100 rotate-0 opacity-100'}
+            `}
+          >
+            <Music className="text-white" size={20} />
+          </div>
+
+          <span
+            className={`
+              absolute left-16 font-black text-lg tracking-tighter whitespace-nowrap origin-left z-10
+              transition-all ease-out
+              ${textColor}
+              ${showExtraUI && !mobileMenuOpen
+                ? 'opacity-100 scale-100 translate-x-0 duration-500 delay-200'
+                : 'opacity-0 scale-50 -translate-x-8 duration-200 delay-0 pointer-events-none'}
+            `}
+          >
+            Alabar.
+          </span>
+        </div>
+
+        <div
+          ref={mobileMenuRef}
+          className={`
+            pointer-events-auto absolute top-0 right-6 flex flex-col rounded-[2.5rem] border shadow-2xl backdrop-blur-3xl 
+            transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] origin-top-right overflow-hidden
+            ${scrolled || mobileMenuOpen ? 'bg-white/50 border-white/20' : 'bg-white/15 border-white/10'}
+            ${mobileMenuOpen
+              ? 'left-[35%] h-auto max-h-[450px] w-auto p-4'
+              : showExtraUI ? 'w-[132px] h-16 p-1.5' : 'w-16 h-16 p-1.5'
+            }
+          `}
+        >
+          <div className="relative w-full h-13 shrink-0">
+            <div
+              className={`
+                absolute left-0 top-0 transition-all ease-out origin-center
+                ${showExtraUI && !mobileMenuOpen
+                  ? 'opacity-100 scale-100 translate-x-0 duration-500'
+                  : 'opacity-0 scale-0 -translate-x-4 duration-150 pointer-events-none'}
+              `}
+            >
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onOpenStreaming();
+                }}
+                className="w-13 h-13 bg-[#3e8d8b] rounded-full flex items-center justify-center text-white shadow-xl active:scale-90 transform-gpu"
+              >
+                <RoundedPlayIcon size={20} fill="white" className="ml-0.5" />
+              </button>
+            </div>
+
+            <button
+              onClick={toggleMobileMenu}
+              className={`
+                absolute right-0 top-0 w-13 h-13 flex items-center justify-center rounded-full transition-all duration-500 
+                ${textColor} active:bg-black/10 z-30 transform-gpu
+                ${mobileMenuOpen ? 'bg-black/5 rotate-90 text-[#40506d]' : ''}
+              `}
+            >
+              {mobileMenuOpen ? <X size={26} /> : <Menu size={26} />}
+            </button>
+          </div>
+
+          <div className={`
+            flex flex-col mt-4 transition-all duration-500
+            ${mobileMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6 pointer-events-none h-0'}
+          `}>
+            <div className="flex flex-col items-start gap-0.5 w-full pl-2">
+              {links.map((link, i) => (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`py-1.5 text-2xl font-black uppercase tracking-tighter transition-all duration-500 hover:text-[#3e8d8b] ${textColor}`}
+                  style={{
+                    transitionDelay: `${mobileMenuOpen ? (i * 50) + 150 : 0}ms`,
+                    transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+                    transform: mobileMenuOpen ? 'translateX(0)' : 'translateX(-15px)',
+                    opacity: mobileMenuOpen ? 1 : 0
+                  }}
+                >
+                  {link.name}
+                </a>
+              ))}
+            </div>
+
+            <div
+              className={`w-full h-px bg-[#40506d]/10 my-4 transition-all duration-700 delay-400
+                ${mobileMenuOpen ? 'opacity-100 scale-x-100' : 'opacity-0 scale-x-0'}
+              `}
+            />
+
+            <div
+              className={`flex items-center justify-start gap-4 pl-2 pb-2 transition-all duration-700 delay-500
+                ${mobileMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}
+              `}
+            >
+              {[Instagram, Facebook, Youtube].map((Icon, i) => (
+                <div key={i} className={`p-2 rounded-xl bg-black/5 ${textColor} hover:bg-[#3e8d8b] hover:text-white transition-all cursor-pointer hover:scale-110 active:scale-90`}>
+                  <Icon size={16} />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+const StreamingModal = ({ isOpen, onClose }) => {
+  const [shouldRender, setShouldRender] = useState(isOpen);
+  const [contentVisible, setContentVisible] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      setShouldRender(true);
+      document.body.style.overflow = 'hidden';
+      // Retrasar la aparición del contenido hasta que la animación del círculo cubra la pantalla
+      const timer = setTimeout(() => setContentVisible(true), 600);
+      return () => clearTimeout(timer);
+    } else {
+      document.body.style.overflow = 'unset';
+      setContentVisible(false);
+    }
+  }, [isOpen]);
+
+  const handleAnimationEnd = (e) => {
+    if (!isOpen && e.target.id === 'modal-overlay') setShouldRender(false);
+  };
+
+  if (!shouldRender) return null;
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 overflow-hidden">
+      <div
+        id="modal-overlay"
+        className={`absolute inset-0 bg-gradient-to-br from-[#2a615f] via-[#3e8d8b] to-[#4ba3a1] ${isOpen ? 'animate-expand-fill' : 'animate-shrink-fill'}`}
+        onAnimationEnd={handleAnimationEnd}
+        onClick={onClose}
+      />
+
+      <div className={`relative w-full max-w-7xl transition-all duration-1000 ease-out ${isOpen && contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
+        <button
+          onClick={onClose}
+          className="absolute -top-16 md:-top-20 right-0 text-white/50 hover:text-white transition-all hover:rotate-90 z-[110]"
+        >
+          <X size={44} strokeWidth={1.5} />
+        </button>
+
+        <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20 px-4 text-white">
+          {/* BLOQUE 1: Título y Párrafo - Ahora con animación hacia abajo */}
+          <div className={`lg:w-1/3 text-center lg:text-left transition-all duration-700 delay-100 ${contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            <h2 className="text-4xl md:text-6xl font-black mb-6 uppercase tracking-tighter leading-none">
+              Escucha <br /> nuestra <br /> <span className="text-[#40506d]">música</span>
+            </h2>
+            <p className="text-white/70 text-lg font-medium">Lleva la adoración con vos en cualquier lugar.</p>
+          </div>
+
+          {/* DIVISOR: Animación de escala vertical */}
+          <div className={`hidden lg:block w-px bg-white/20 transition-all duration-1000 delay-300 ${contentVisible ? 'h-80 opacity-100' : 'h-0 opacity-0'}`} />
+
+          {/* BLOQUE 2: Cuadrícula de Botones */}
+          <div className="lg:w-2/3 w-full grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {['Spotify', 'YouTube Music', 'Apple Music', 'Deezer'].map((name, i) => (
+              <button
+                key={name}
+                className={`flex items-center gap-4 p-4 rounded-3xl bg-white/10 border border-white/10 text-white hover:bg-white/20 transition-all backdrop-blur-md group active:scale-95
+                  ${contentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}
+                `}
+                style={{ transitionDelay: `${contentVisible ? 400 + (i * 100) : 0}ms` }}
+              >
+                <div className="w-12 h-12 rounded-2xl bg-[#40506d] flex items-center justify-center group-hover:scale-110 transition-transform shadow-xl shrink-0">
+                  <RoundedPlayIcon size={20} fill="white" className="ml-1" />
+                </div>
+                <div className="text-left">
+                  <span className="font-bold text-xl">{name}</span>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default function App() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  return (
+    <div className="min-h-screen bg-[#f3f4f7] font-sans text-[#40506d] overflow-x-hidden selection:bg-[#3e8d8b]/20">
+      <Navbar onOpenStreaming={() => setIsModalOpen(true)} />
+      <StreamingModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+
+      {/* --- SECCIÓN HERO --- */}
+      <section id="inicio" className="relative min-h-screen w-full flex flex-col items-center justify-center overflow-hidden pt-24 md:pt-32 pb-32">
+        <FloatingOrbs />
+
+        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/20 to-[#f3f4f7] z-[5]" />
+        <div className="absolute inset-0 bg-black/30 z-[2]" />
+
+        <div className="absolute inset-0 z-0">
+          <img
+            src="https://lh3.googleusercontent.com/sitesv/APaQ0SRn0HCILiGLmC3FEQ4HIfoXZ387aX5RpFQHdX8_O42Ep38zcri83DLNQj5W8CSO5KedOuzdiS2zPT2KMOcEMo8E6ViIOJlsMSAB9FJX9JVaSO8zTs_rIM9644_01AgNvnGI3HPy0P3KEglEVLhjMnC66Xzr0RQCyhCXNTdkDJeuZKK5DqA8JkpYRp8=w16383"
+            className="w-full h-full object-cover brightness-[0.7] contrast-[1.1] animate-slow-zoom"
+            alt="Fondo Tiempo de Alabar"
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&q=80&w=2070";
+            }}
+          />
+        </div>
+
+        <div className="relative z-20 text-center px-4 max-w-6xl w-full flex-grow flex flex-col items-center justify-center mt-6 lg:mt-12">
+          <Reveal>
+            <HeroFeaturedBadge text="Nuevo Lanzamiento Disponible" />
+          </Reveal>
+
+          <Reveal delay={200}>
+            <h1 className="text-5xl md:text-7xl lg:text-[8rem] xl:text-[9rem] font-black text-white mb-6 md:mb-8 leading-[1.1] lg:leading-[0.85] tracking-tighter drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+              DIOS <br className="hidden sm:block" /> <span className="text-[#d8c8e1] italic drop-shadow-[0_10px_50px_rgba(216,200,225,0.4)]">ESTÁ</span> AQUÍ.
+            </h1>
+          </Reveal>
+
+          <div className="max-w-2xl mx-auto w-full px-6 md:px-10 py-6 md:py-8 rounded-[2rem] md:rounded-[3rem] backdrop-blur-md bg-black/30 border border-white/10 shadow-[0_30px_100px_rgba(0,0,0,0.4)] animate-hero-reveal">
+            <Reveal delay={400}>
+              <p className="text-base md:text-xl lg:text-2xl text-white font-medium mb-6 md:mb-8 leading-relaxed drop-shadow-lg max-w-xl mx-auto">
+                Descubre una nueva forma de adorar. <br className="hidden md:block" />
+                Música que conecta el cielo con la tierra.
+              </p>
+            </Reveal>
+
+            <Reveal delay={600}>
+              <div className="flex flex-col sm:flex-row gap-4 md:gap-5 justify-center">
+                <InteractiveButton
+                  onClick={() => setIsModalOpen(true)}
+                  variant="primary"
+                  icon={(props) => <RoundedPlayIcon {...props} fill="white" />}
+                >
+                  Nuestra Música
+                </InteractiveButton>
+
+                <InteractiveButton
+                  variant="secondary"
+                  icon={Calendar}
+                >
+                  Ver Agenda
+                </InteractiveButton>
+              </div>
+            </Reveal>
+
+            <div className="mt-6 flex justify-center gap-6 md:gap-8 text-white/40 font-black text-[9px] md:text-[10px] uppercase tracking-[0.4em]">
+              <div className="flex items-center gap-2"><Users size={14} className="text-[#d8c8e1]" /> +50k Oyentes</div>
+              <div className="flex items-center gap-2"><Mic2 size={14} className="text-[#3e8d8b]" /> 12 Álbumes</div>
+            </div>
+          </div>
+        </div>
+
+        <div className="relative z-30 mt-44 mb-10 flex flex-col items-center gap-4 group cursor-pointer lg:absolute lg:bottom-10 lg:left-1/2 lg:-translate-x-1/2 lg:mb-0">
+          <div className="absolute inset-0 bg-[#3e8d8b]/20 blur-2xl rounded-full scale-150 opacity-0 group-hover:opacity-100 transition-opacity duration-700 -z-10" />
+          <span className="relative text-white/40 text-[10px] font-black uppercase tracking-[0.6em] group-hover:text-white transition-all duration-500 overflow-hidden">
+            Explorar
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full group-hover:animate-shimmer" />
+          </span>
+          <div className="relative w-7 h-11 rounded-full border border-white/20 flex flex-col items-center justify-start p-1 backdrop-blur-[2px] overflow-hidden group-hover:border-[#3e8d8b]/50 group-hover:scale-105 transition-all duration-500">
+            <div className="absolute inset-0 bg-gradient-to-b from-[#3e8d8b]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="w-1 h-3 bg-gradient-to-b from-[#3e8d8b] to-[#d8c8e1] rounded-full animate-scroll-flow shadow-[0_0_10px_rgba(62,141,139,0.8)]" />
+            <div className="absolute bottom-1 w-1 h-1 bg-white/10 rounded-full" />
+          </div>
+        </div>
+      </section>
+
+      {/* --- SECCIÓN ACERCA DE --- */}
+      <section id="acerca-de" className="py-24 md:py-40 px-6 bg-white overflow-hidden">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-32 items-center">
+            <Reveal>
+              <div className="relative">
+                <div className="absolute -top-10 -left-10 w-32 h-32 bg-[#d8c8e1]/30 rounded-full blur-3xl animate-pulse" />
+                <span className="text-[#3e8d8b] font-black uppercase tracking-[0.4em] text-[10px] mb-6 block">Nuestra Historia</span>
+                <h2 className="text-5xl md:text-7xl font-black tracking-tighter uppercase leading-none mb-10">
+                  Unidos por <br /> una misma <span className="text-[#d8c8e1]">visión</span>.
+                </h2>
+                <div className="space-y-6 text-lg text-[#40506d]/70 font-medium leading-relaxed">
+                  <p>
+                    Tiempo de Alabar nació como una respuesta a la necesidad de crear espacios de adoración auténtica y profunda, donde la música fuera el puente entre lo cotidiano y lo eterno.
+                  </p>
+                  <p>
+                    Somos un equipo de músicos y adoradores apasionados por la excelencia y la sensibilidad espiritual.
+                  </p>
+                </div>
+                <div className="mt-12 p-8 rounded-[2rem] bg-[#f3f4f7] border border-[#3e8d8b]/10 relative group">
+                  <Quote className="absolute top-6 right-6 text-[#d8c8e1]/40 group-hover:scale-125 transition-transform" size={40} />
+                  <p className="text-xl font-bold italic text-[#40506d] leading-snug">
+                    "La música no es el fin, es el vehículo para que el cielo toque la tierra."
+                  </p>
+                </div>
+              </div>
+            </Reveal>
+
+            <Reveal delay={300}>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-4 pt-12">
+                  <div className="aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl">
+                    <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&q=80&w=600" className="w-full h-full object-cover hover:scale-110 transition-transform duration-1000" alt="Music" />
+                  </div>
+                </div>
+                <div className="space-y-4">
+                  <div className="aspect-square rounded-[3rem] bg-[#40506d] flex flex-col items-center justify-center text-white text-center p-6 shadow-xl">
+                    <span className="text-4xl font-black">100%</span>
+                    <span className="text-[9px] uppercase font-black tracking-widest mt-2">Pasión por Adorar</span>
+                  </div>
+                  <div className="aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl">
+                    <img src="https://images.unsplash.com/photo-1493225255756-d9584f8606e9?auto=format&fit=crop&q=80&w=600" className="w-full h-full object-cover hover:scale-110 transition-transform duration-1000" alt="Stage" />
+                  </div>
+                </div>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* --- SECCIÓN BENTO / MÚSICA --- */}
+      <section id="música" className="py-20 md:py-40 px-6 bg-[#f3f4f7]">
+        <div className="max-w-7xl mx-auto flex flex-col gap-12">
+          <Reveal>
+            <div className="max-w-2xl">
+              <span className="text-[#3e8d8b] font-black uppercase tracking-[0.5em] text-[10px] mb-4 md:mb-6 block">Nuestro Contenido</span>
+              <h2 className="text-5xl md:text-8xl font-black tracking-tighter uppercase leading-none">Lo más <br /> <span className="text-[#d8c8e1]">vibrante</span></h2>
+            </div>
+          </Reveal>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div className="lg:col-span-7 h-[400px] md:h-[600px] relative rounded-[3rem] md:rounded-[4rem] overflow-hidden shadow-2xl group">
+              <img
+                src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&q=80&w=800"
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                alt="Nuevo Single"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent" />
+              <div className="absolute bottom-8 md:bottom-12 left-8 md:left-12 text-white">
+                <span className="bg-[#3e8d8b] text-[9px] md:text-[10px] font-black px-4 md:px-5 py-2 md:py-2.5 rounded-full uppercase tracking-widest mb-4 md:mb-6 inline-block shadow-xl">Lanzamiento</span>
+                <h3 className="text-4xl md:text-7xl font-black tracking-tighter uppercase leading-[0.9]">Tu Gracia <br /> Bastará</h3>
+                <p className="text-white/60 text-lg md:text-xl mt-4 font-medium">Disponible ahora en streaming.</p>
+              </div>
+            </div>
+
+            <div className="lg:col-span-5 flex flex-col gap-8">
+              <div className="flex-1 p-8 md:p-12 bg-gradient-to-br from-[#40506d] to-[#1e2736] text-white rounded-[3rem] md:rounded-[4rem] shadow-2xl relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-[#3e8d8b]/20 blur-3xl rounded-full" />
+                <div className="relative z-10 flex flex-col justify-between h-full">
+                  <div>
+                    <span className="text-[#d8c8e1] text-[9px] md:text-[10px] font-black uppercase tracking-widest mb-4 md:mb-6 block">Próxima Fecha</span>
+                    <h3 className="text-3xl md:text-5xl font-black tracking-tighter uppercase leading-none">Noche de <br /> Adoración</h3>
+                  </div>
+                  <div className="flex flex-col gap-4 md:gap-6 text-[10px] md:text-sm font-bold uppercase tracking-widest text-white/50">
+                    <div className="flex items-center gap-4 py-3 md:py-4 border-b border-white/10"><Calendar size={20} className="text-[#3e8d8b]" /> 15 Mayo, 20:00HS</div>
+                    <div className="flex items-center gap-4 py-3 md:py-4 border-b border-white/10"><MapPin size={20} className="text-[#3e8d8b]" /> Teatro Central</div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="h-36 md:h-44 bg-[#d8c8e1] rounded-[2.5rem] md:rounded-[3rem] p-8 md:p-10 flex items-center justify-between shadow-xl group cursor-pointer hover:bg-[#3e8d8b] transition-all duration-500">
+                <h4 className="text-2xl md:text-3xl font-black text-[#40506d] group-hover:text-white transition-colors uppercase tracking-tighter">Organizar <br /> evento</h4>
+                <div className="w-12 h-12 md:w-16 md:h-16 bg-white rounded-full flex items-center justify-center text-[#40506d] shadow-xl group-hover:rotate-180 transition-transform">
+                  <Settings size={24} className="animate-spin-slow" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* --- SECCIÓN AGENDA --- */}
+      <section id="agenda" className="py-20 bg-white">
+      </section>
+
+      {/* --- FOOTER --- */}
+      <footer id="contacto" className="bg-[#40506d] text-white py-20 md:py-32 px-6 text-center relative overflow-hidden">
+        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-[#3e8d8b]/10 blur-[150px] rounded-full -translate-x-1/2 translate-y-1/2" />
+        <div className="max-w-5xl mx-auto relative z-10">
+          <h3 className="text-5xl md:text-8xl font-black tracking-tighter mb-8 md:top-10 uppercase">ALABAR<span className="text-[#d8c8e1]">.</span></h3>
+          <p className="text-white/40 text-lg md:text-2xl mb-12 md:mb-16 max-w-lg mx-auto leading-relaxed">
+            Inspirando vidas a través de la música y la adoración profunda.
+          </p>
+          <div className="flex justify-center gap-6 md:gap-8 mb-16 md:mb-20">
+            {[Instagram, Facebook, Youtube].map((Icon, i) => (
+              <div key={i} className="w-14 h-14 md:w-16 md:h-16 rounded-[1.5rem] md:rounded-[2rem] bg-white/5 flex items-center justify-center hover:bg-[#3e8d8b] hover:-translate-y-2 transition-all cursor-pointer border border-white/10 shadow-xl">
+                <Icon size={24} />
+              </div>
+            ))}
+          </div>
+          <p className="text-white/20 text-[10px] md:text-[11px] font-black uppercase tracking-[0.6em]">© {new Date().getFullYear()} Tiempo de Alabar • Adoración que Inspira</p>
+        </div>
+      </footer>
+
+      <style>{`
+        @keyframes expand-fill {
+          from { clip-path: circle(0% at calc(100% - 4.5rem) 3.5rem); }
+          to { clip-path: circle(200% at calc(100% - 4.5rem) 3.5rem); }
+        }
+        @keyframes shrink-fill {
+          from { clip-path: circle(200% at calc(100% - 4.5rem) 3.5rem); }
+          to { clip-path: circle(0% at calc(100% - 4.5rem) 3.5rem); }
+        }
+        @keyframes float {
+          0%, 100% { transform: translateY(0) scale(1); }
+          50% { transform: translateY(-40px) scale(1.05); }
+        }
+        @keyframes float-rev {
+          0%, 100% { transform: translateY(0) scale(1.05); }
+          50% { transform: translateY(40px) scale(1); }
+        }
+        @keyframes scroll-flow {
+          0% { transform: translateY(-100%); opacity: 0; }
+          20% { opacity: 1; }
+          80% { opacity: 1; }
+          100% { transform: translateY(180%); opacity: 0; }
+        }
+        @keyframes slow-zoom {
+          from { transform: scale(1); }
+          to { transform: scale(1.15); }
+        }
+        @keyframes hero-reveal {
+          from { opacity: 0; transform: translateY(30px); filter: blur(10px); }
+          to { opacity: 1; transform: translateY(0); filter: blur(0); }
+        }
+        @keyframes spin-slow {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        @keyframes shimmer {
+          0% { transform: translateX(-100%) skewX(-15deg); }
+          100% { transform: translateX(200%) skewX(-15deg); }
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .animate-expand-fill { animation: expand-fill 1.2s cubic-bezier(0.85, 0, 0.15, 1) forwards; }
+        .animate-shrink-fill { animation: shrink-fill 1s cubic-bezier(0.85, 0, 0.15, 1) forwards; }
+        .animate-float { animation: float 20s infinite ease-in-out; }
+        .animate-float-rev { animation: float-rev 24s infinite ease-in-out; }
+        .animate-scroll-flow { animation: scroll-flow 2.2s infinite cubic-bezier(0.65, 0, 0.35, 1); }
+        .animate-slow-zoom { animation: slow-zoom 30s infinite alternate ease-in-out; }
+        .animate-hero-reveal { animation: hero-reveal 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .animate-spin-slow { animation: spin-slow 15s linear infinite; }
+        .animate-shimmer { animation: shimmer 4s infinite ease-in-out; }
+        
+        .w-13 { width: 3.25rem; }
+        .h-13 { height: 3.25rem; }
+        .backface-hidden { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+        .translate-z-0 { transform: translateZ(0); -webkit-transform: translateZ(0); }
+      `}</style>
+    </div>
+  );
+}

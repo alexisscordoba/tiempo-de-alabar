@@ -1,0 +1,78 @@
+{title: Cordero y León de Judá}
+{composer: Cristian Sanchez Esquivel}
+{lyricist: Cristian Sanchez Esquivel}
+
+{key: Eb}
+{time: 4/4}
+{tempo: 68}
+
+{start_of_grid label="Intro"}
+|| Abmaj7 . . . | Cm . . . | Abmaj7  . . . | Bb  . . . |
+|  Abmaj7 . . . | Cm . . . | Abmaj7  . . . | Bb  . . . ||
+{end_of_grid}
+
+{start_of_section: Verso 1}
+[Abmaj7] Antes del ti[Cm]emp[Bbsus]o... antes del [Abmaj7]ser
+Tu voz reso[Cm]nó en [Bb]la eterni[Abmaj7]dad
+[Abmaj7] En seis [Cm]días, [Bbsus]con tu pode[Abmaj7]r
+Formaste [Fm]cielos, [Bbsus]tierra y mar.   [Abmaj7]
+{end_of_section}
+
+{start_of_section: Verso 2}
+Tu l[Cm]ey, en [Bb]nuestros cora[Ab]zones
+Refl[Cm]eja Tu ca[Bb]rácter de amor[Ab]
+En el san[Cm]tuario celestial[Bb]
+Inter[Gm7]cedes[Abmaj7] mi fiel Media[Abmaj7]dor [Bbsus]
+{end_of_section}
+
+{start_of_section: Coro 1}
+Jesús, Cor[Eb]dero y Le[Bb/D]ón de Jud[Abmaj7]á
+Tu [Eb]gloria lle[Bb/D]na la inmensi[Abmaj7]dad
+Cread[Eb]or, Redentor[Bb], Rey e[Abmaj7]terno  [Eb/G]
+Te ado[Fm7]ramos en Tu [Bbsus]majestad.
+{end_of_section}
+
+{start_of_section: Intro}
+[Abmaj7] [Cm] [Abmaj7] [Bb]
+{end_of_section}
+
+{start_of_section: Verso 3}
+El [Ab/C]sábado, cont[Bb]empla tu creac[Eb]ión
+Nos rec[Bb]uerda Tu [Abmaj7]obra y poder
+En [Ab/C]Ti, hallamos [Bb/D]paz y re[Gm7]poso [Ab]
+Renova[Abmaj7]ción para nuestro se[Bbsus]r
+{end_of_section}
+
+{start_of_section: Coro 2}
+Jesús[Eb], Cordero y Le[Bb/D]ón de Ju[Eb/G]dá
+Tu [Ab]gloria llena [Cm]la inmensid[Bbsus]ad    [Bb]
+Crea[Cm]dor, Reden[Eb/G]tor, Rey e[Abmaj7]terno  [Eb/G]
+Te ado[Fm7]ramos en Tu [Bb]majest[Ebsus]ad
+{end_of_section}
+
+{start_of_section: Puente}
+Rey del uni[Ab]verso, Señor de se[Bbsus]ñores [Bb]
+Nues[Eb/G]tras [Ab]voces se alzan [Eb]en adorac[Bb]ión
+Por los [Ab]siglos de los [Eb/G]siglos, sin [Cm]fin[Cm6/A]
+Toda la crea[Ab]ción cantará Tu lo[Bbsus]or.
+{end_of_section}
+
+{start_of_section: Coro 3}
+Jesús[Eb], Cordero y Le[Bb/D]ón de Ju[Eb/G]dá
+Tu [Ab]gloria llena [Cm]la inmensid[Bbsus]ad
+Crea[Cm]dor, Reden[Eb/G]tor, Rey e[Abmaj7]terno  [Eb/G]
+Te ado[Fm7]ramos en Tu [Bb]majest[Cm7]ad..  [Eb/G]
+Majes[Abmaj7]tad, majes[Eb/G]tad, majes[Fm7]tad...
+{end_of_section}
+
+{start_of_section: Coro 4}
+Jesús[Eb], Cordero y Le[Bb/D]ón de Ju[Eb/G]dá
+Tu [Ab]gloria llena [Cm]la inmensid[Bbsus]ad    [Bb]
+Cread[Cm]or, Redent[Gm]or, Rey [Abmaj7]eterno [Eb/G]
+Te ado[Fm7]ramos en Tu [Bb]majestad.
+{end_of_section}
+
+{start_of_grid label="Final"}
+|| Abmaj7 . . . | Cm . . . | Abmaj7  . . . | Bb  . . . |
+|  Abmaj7 . . . ||
+{end_of_grid}

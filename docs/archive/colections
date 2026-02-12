@@ -1,0 +1,32 @@
+### 📂 Folder Collections (Dynamic Content)
+Estas colecciones generan múltiples entradas y rutas individuales mediante plantillas de Astro.
+
+* **`musica`**: Gestiona el repertorio completo. Incluye metadatos técnicos (tonos, BPM), letras y recursos descargables.
+* **`eventos`**: Maneja la agenda y el histórico. Implementa una lógica de nombrado de archivos por año y slug (`{{year}}-{{event_slug}}`) para evitar duplicados.
+* **`members`**: Perfiles del equipo. Almacena fotos, roles y redes sociales personales para la sección de identidad.
+* **`roles`**: Colección auxiliar que define funciones técnicas y artísticas (Voz, Bajo, Staff), vinculadas a los miembros mediante un widget de relación.
+* **`hitos`**: Línea de tiempo histórica. Registra logros por año y permite generar subpáginas detalladas para momentos significativos del ministerio.
+
+---
+
+### ⚙️ Global Data (Settings)
+Archivos de configuración única que alimentan a todo el sitio simultáneamente.
+
+* **`globals` (`globals.yaml`)**: **El "Cerebro" del sitio.** Centraliza tres pilares:
+1. **Site Info:** Datos legales y créditos del footer.
+2. **Contact Info:** Teléfono, email y ubicación (Fuente única para Contacto y Footer).
+3. **Links:** Listado maestro de redes sociales, plataformas de streaming y mensajería, categorizado por tipo para filtrado dinámico.
+
+---
+
+### 📄 File Collections (Static Page Layouts)
+Gestión de contenidos para páginas con diseños específicos.
+
+* **`inicio`**: Configura la landing page. Gestiona el Hero, la frase destacada y los widgets de selección para música o eventos promocionados.
+* **`acerca-de`**: Define la identidad. Misión, visión, el relato histórico detallado (Markdown) y la galería institucional.
+* **`organizar`**: Herramienta logística para organizadores. Contiene el Rider Técnico (Input List), Stageplot (Imagen/PDF), necesidades de hospitalidad y lista de equipamiento propio vs. requerido.
+* **`apoyo`**: Gestiona la transparencia de donaciones. Describe la asignación de fondos y centraliza los métodos de pago (MercadoPago, PayPal y datos bancarios con función de copiado).
+* **`contacto`**: Configuración de la página de contacto. Gestiona la identidad visual de la sección y los textos del formulario (mensajes de éxito y etiquetas), desacoplado de los datos de contacto que ahora residen en `globals`.
+* **`bio`**: El portal de enlaces (Linktree propio). Gestiona la identidad visual de la landing de redes, incluyendo widgets de **Video Destacado** (YouTube) y **Evento Destacado** (vía relación), consumiendo el resto de los botones desde `globals.yaml`.
+
+---

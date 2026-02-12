@@ -1,0 +1,65 @@
+{title: Gracias}
+{composer: Nicolás Puzin}
+{lyricist: Nicolás Puzin}
+
+{key: E}
+{time: 4/4}
+{tempo: 115}
+
+{start_of_grid label="Intro"}
+|| E . . . | F#m . . . | G#m  . . . | A  . . . |
+|  E . . . | F#m . . . | G#m  . . . | A  . . . |
+|  A . . . ||
+{end_of_grid}
+
+{start_of_section: Verso 1}
+Cans[E]ado de and[A]ar y and[E]ar.[A]   Un m[E]undo d[A]uro de [C#m]camin[A]ar
+Una d[E]ura r[A]ealid[E]ad [A]
+Pero ha[C#m]y algo mejor, que el m[B]undo oculto
+Un glor[A]ioso final
+{end_of_section}
+
+{start_of_section: Verso 2}
+Es dif[E]ícil [A]no tropez[E]ar.[A]  Es dif[E]ícil v[A]olver a[C#m] empez[A]ar
+Una d[E]ura r[A]ealid[E]ad [A]
+Pero ha[C#m]y algo mejor, que el m[B]undo oculto
+Un glor[A]ioso final
+{end_of_section}
+
+{start_of_section: Pre coro}
+Vend[E]rá en las [F#m]nubes, [G#m]baja[A]rá. No hab[E]rá do[F#m]lor, [G#m]solo p[A]az
+Y to[E]do...[F#m]os [G#m]vamos a entonar,[A]
+Unid[E]os [F#m]vamos a can[C#m]ta...[B/D#]a...[A]ar
+{end_of_section}
+
+{start_of_section: Coro 1}
+Grac[E]ia...[B]as, gra[C#m]cia...[A]as.
+Nos vi[E]niste a rescat[B]ar, todos [C#m]vamos a cant[A]ar
+Grac[E]ia...[B]as, gra[C#m]cia...[A]as.
+Nos vi[E]niste a rescat[B]ar, todos [C#m]vamos a cant[A]ar  [A]
+{end_of_section}
+
+{start_of_section: Verso 3}
+Las lá[E]grimas Él[A] seca[E]rá,[A] y el dol[E]or ya[A] no exis[C#m]tirá.[A]
+Su gl[E]oria al fi[A]n reina[E]rá.[A]
+Y a[C#m]quel que creyó, en [B]Cristo encontró
+la vida[A] y la verdad.
+{end_of_section}
+
+{start_of_section: Pre coro}
+Vend[E]rá en las [F#m]nubes, [G#m]baja[A]rá. No hab[E]rá do[F#m]lor, [G#m]solo p[A]az
+Y to[E]do...[F#m]os [G#m]vamos a entonar,[A]
+Unid[E]os [F#m]vamos a can[C#m]ta...[B/D#]a...[A]ar
+{end_of_section}
+
+{start_of_section: Coro 2}
+Grac[E]ia...[B]as, gra[C#m]cia...[A]as.
+Nos vi[E]niste a rescat[B]ar, todos [C#m]vamos a cant[A]ar
+Grac[E]ia...[B]as, gra[C#m]cia...[A]as.
+Tu pro[E]mesa es realid[B]ad, todos [C#m]vamos a cant[A]ar
+{end_of_section}
+
+{start_of_section: Final}
+Grac[E]ia...[B]as, gra[C#m]cia...[A]as.
+Grac[E]ias..[B]. Jesús[C#m].     [A]
+{end_of_section}
