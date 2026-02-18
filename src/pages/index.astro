@@ -22,8 +22,8 @@ const { hero, seo, quote_block, featured, musica_snippet } = inicio.data;
 			<Hero
 				title={hero.title || ""}
 				subtitle={hero.subtitle || ""}
-				background={hero.background}
-				badge_text="Sitio Oficial"
+				hero_images={hero.hero_images}
+				badge_text={hero.badge_text}
 				cta_primary={
 					hero.cta_primary_label
 						? {

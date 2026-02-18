@@ -29,7 +29,12 @@ const SOCIAL_LINKS = [
 
 // --- Main Component ---
 export default function Navbar({ streamingLinks = [] }: Props) {
-    const [isScrolled, setIsScrolled] = useState(false);
+    const [isScrolled, setIsScrolled] = useState(() => {
+        if (typeof window !== 'undefined') {
+            return window.scrollY > 100;
+        }
+        return false;
+    });
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [showMobileNav, setShowMobileNav] = useState(true);
@@ -37,7 +42,7 @@ export default function Navbar({ streamingLinks = [] }: Props) {
 
     const [logoGlow, setLogoGlow] = useState(false);
     const handleLogoClick = () => {
-        if (isScrolled) return;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         setLogoGlow(true);
         setTimeout(() => setLogoGlow(false), 600);
     };
@@ -59,26 +64,39 @@ export default function Navbar({ streamingLinks = [] }: Props) {
             // Update scrolled state for styling
             setIsScrolled(currentScrollY > 100);
 
-            // Intelligent Scroll Behavior for Mobile
-            if (currentScrollY > lastScrollY && currentScrollY > 100) {
-                // Scrolling DOWN -> Hide Navbar
-                setShowMobileNav(false);
-            } else {
-                // Scrolling UP -> Show Navbar
-                setShowMobileNav(true);
-            }
+            // Intelligent Scroll Behavior for Mobile with Threshold
+            const scrollThreshold = 30; // 30px tolerance for deliberate action
 
-            setLastScrollY(currentScrollY);
+            if (Math.abs(currentScrollY - lastScrollY) > scrollThreshold) {
+                if (currentScrollY > lastScrollY && currentScrollY > 100) {
+                    // Scrolling DOWN -> Hide Navbar (only if past hero)
+                    setShowMobileNav(false);
+                } else {
+                    // Scrolling UP -> Show Navbar
+                    setShowMobileNav(true);
+                }
+                setLastScrollY(currentScrollY);
+            }
         };
 
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, [lastScrollY]);
 
-    const [currentPath, setCurrentPath] = useState('/');
+    const [currentPath, setCurrentPath] = useState(() => {
+        if (typeof window !== 'undefined') {
+            return window.location.pathname;
+        }
+        return '/';
+    });
+    const [hasMounted, setHasMounted] = useState(false);
 
     useEffect(() => {
         setCurrentPath(window.location.pathname);
+        // Enable transitions after component has mounted and initial state is set
+        requestAnimationFrame(() => {
+            setHasMounted(true);
+        });
     }, []);
 
 
@@ -89,20 +107,23 @@ export default function Navbar({ streamingLinks = [] }: Props) {
          ========================================= */}
             <nav
                 className={cn(
-                    "hidden md:flex fixed top-0 left-0 right-0 z-50 justify-center items-center px-4 desktop:px-8 transition-all duration-1000 [transition-timing-function:cubic-bezier(0.4,0,0.2,1)]",
+                    "hidden md:flex fixed top-0 left-0 right-0 z-50 justify-center items-center px-4 desktop:px-8",
+                    hasMounted && "transition-all duration-1000 [transition-timing-function:cubic-bezier(0.4,0,0.2,1)]",
                     isScrolled ? "py-2" : "py-5"
                 )}
             >
                 <div
                     onMouseMove={handleMouseMove}
                     className={cn(
-                        "flex items-center transition-all duration-1000 [transition-timing-function:cubic-bezier(0.4,0,0.2,1)] rounded-full gap-4 desktop:gap-20 py-1.5 relative group overflow-hidden",
+                        "flex items-center rounded-full gap-4 desktop:gap-20 py-1.5 relative group overflow-hidden",
+                        hasMounted && "transition-all duration-1000 [transition-timing-function:cubic-bezier(0.4,0,0.2,1)]",
                         isScrolled ? "px-4 desktop:px-6 py-1" : "px-5 desktop:px-8 py-1.5"
                     )}
                 >
                     {/* Independent Glass Background Layer */}
                     <div className={cn(
-                        "absolute inset-0 -z-10 transition-all duration-1000 [transition-timing-function:cubic-bezier(0.4,0,0.2,1)] rounded-full",
+                        "absolute inset-0 -z-10 rounded-full",
+                        hasMounted && "transition-all duration-1000 [transition-timing-function:cubic-bezier(0.4,0,0.2,1)]",
                         isScrolled
                             ? "bg-white/40 backdrop-blur-2xl shadow-lg border border-white/20"
                             : "bg-transparent border border-transparent shadow-none backdrop-blur-[0px]"
@@ -125,7 +146,8 @@ export default function Navbar({ streamingLinks = [] }: Props) {
                         </div>
                         <span
                             className={cn(
-                                "font-black text-lg tracking-tighter flex items-baseline whitespace-nowrap pointer-events-none transition-all duration-500",
+                                "font-black text-lg tracking-tighter flex items-baseline whitespace-nowrap pointer-events-none",
+                                hasMounted && "transition-all duration-500",
                                 isScrolled ? "text-secondary" : "text-white"
                             )}
                             style={{
@@ -136,7 +158,10 @@ export default function Navbar({ streamingLinks = [] }: Props) {
                             }}
                         >
                             <span
-                                className="inline-block overflow-hidden transition-all duration-700 [transition-timing-function:cubic-bezier(0.4,0,0.2,1)]"
+                                className={cn(
+                                    "inline-block overflow-hidden",
+                                    hasMounted && "transition-all duration-700 [transition-timing-function:cubic-bezier(0.4,0,0.2,1)]"
+                                )}
                                 style={{
                                     maxWidth: isScrolled ? '0px' : '7em',
                                     opacity: isScrolled ? 0 : 1,
@@ -150,7 +175,8 @@ export default function Navbar({ streamingLinks = [] }: Props) {
 
                     {/* Center: Navigation Links (Inner Pill) */}
                     <div className={cn(
-                        "flex items-center gap-0.5 p-0.5 rounded-full border transition-all duration-1000 [transition-timing-function:cubic-bezier(0.4,0,0.2,1)] relative group/mini overflow-hidden backdrop-blur-md",
+                        "flex items-center gap-0.5 p-0.5 rounded-full border relative group/mini overflow-hidden backdrop-blur-md",
+                        hasMounted && "transition-all duration-1000 [transition-timing-function:cubic-bezier(0.4,0,0.2,1)]",
                         isScrolled
                             ? "bg-white/50 border-white/40 shadow-sm"
                             : "bg-white/0 border-white/30 shadow-none"
@@ -165,7 +191,7 @@ export default function Navbar({ streamingLinks = [] }: Props) {
                         {NAV_LINKS.map((link) => {
                             // Simple active logic for demo / implementation
                             // In a full Astro app, you'd use current path
-                            const isActive = typeof window !== 'undefined' && window.location.pathname === link.href;
+                            const isActive = currentPath === link.href;
 
                             return (
                                 <a
@@ -240,9 +266,10 @@ export default function Navbar({ streamingLinks = [] }: Props) {
                         exit={{ y: -100, opacity: 0 }}
                         transition={{ type: "spring", stiffness: 300, damping: 30 }}
                         className={cn(
-                            "md:hidden fixed top-4 left-4 z-50 flex items-center gap-2 px-2.5 py-1.5 rounded-full backdrop-blur-md border border-white/10 shadow-lg",
+                            "md:hidden fixed top-4 left-4 z-50 flex items-center gap-2 px-2.5 py-1.5 rounded-full backdrop-blur-md border border-white/10 shadow-lg cursor-pointer active:scale-95 transition-transform",
                             isScrolled ? "bg-black/20" : "bg-black/30"
                         )}
+                        onClick={handleLogoClick}
                     >
                         <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center text-white text-[10px] font-bold">
                             ♫
@@ -268,7 +295,7 @@ export default function Navbar({ streamingLinks = [] }: Props) {
                     )}
                     variants={{
                         closed: {
-                            width: isScrolled ? 44 : 100, // Compact vs Extended
+                            width: showMobileNav ? 100 : 44, // Compact vs Extended
                             height: 44,
                             backgroundColor: isScrolled ? "rgba(0, 0, 0, 0.2)" : "rgba(0, 0, 0, 0.3)"
                         },
@@ -285,8 +312,14 @@ export default function Navbar({ streamingLinks = [] }: Props) {
                     {!isMenuOpen && (
                         <div className="w-full h-full flex items-center justify-center px-1">
                             {/* Extended State: Show Play Button */}
-                            {!isScrolled && (
-                                <div className="flex items-center mr-2 border-r border-white/20 pr-2">
+                            {showMobileNav && (
+                                <div
+                                    className="flex items-center mr-2 border-r border-white/20 pr-2 cursor-pointer active:scale-95 transition-transform"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        setIsModalOpen(true);
+                                    }}
+                                >
                                     <Play size={18} className="text-white" fill="currentColor" />
                                 </div>
                             )}

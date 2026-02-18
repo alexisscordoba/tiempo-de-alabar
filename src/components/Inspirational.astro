@@ -9,52 +9,70 @@ const { text, author, backgroundImage } = Astro.props;
 ---
 
 <section
-    class="relative py-24 md:py-32 overflow-hidden flex items-center justify-center bg-neutral-1"
+    class="relative py-20 px-4 overflow-hidden flex items-center justify-center bg-gradient-to-br from-secondary to-[#2a364a]"
 >
-    {/* Ambient Background Elements */}
-    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+    {/* Background Ambient Light */}
+    <div class="absolute inset-0 pointer-events-none">
         <div
-            class="absolute top-0 left-1/4 w-[500px] h-[500px] bg-accent/20 rounded-full blur-[120px] opacity-60 mix-blend-multiply animate-pulse-slow"
-        >
-        </div>
-        <div
-            class="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-primary/10 rounded-full blur-[100px] opacity-50 mix-blend-multiply"
+            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gradient-radial from-white/10 to-transparent opacity-40 blur-3xl"
         >
         </div>
     </div>
 
-    <div class="relative z-10 max-w-4xl mx-auto px-6 text-center">
-        {/* Decorative Quote Icon */}
-        <div class="mb-8 text-secondary/20 flex justify-center">
-            <svg
-                width="48"
-                height="48"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                xmlns="http://www.w3.org/2000/svg"
-            >
-                <path
-                    d="M14.017 21L14.017 18C14.017 16.8954 14.9124 16 16.017 16H19.017C19.5693 16 20.017 15.5523 20.017 15V9C20.017 8.44772 19.5693 8 19.017 8H15.017C14.4647 8 14.017 8.44772 14.017 9V11C14.017 11.5523 13.5693 12 13.017 12H12.017V5H22.017V15C22.017 18.3137 19.3307 21 16.017 21H14.017ZM5.0166 21L5.0166 18C5.0166 16.8954 5.91203 16 7.0166 16H10.0166C10.5689 16 11.0166 15.5523 11.0166 15V9C11.0166 8.44772 10.5689 8 10.0166 8H6.0166C5.46432 8 5.0166 8.44772 5.0166 9V11C5.0166 11.5523 4.56889 12 4.0166 12H3.0166V5H13.0166V15C13.0166 18.3137 10.3303 21 7.0166 21H5.0166Z"
-                ></path>
-            </svg>
-        </div>
-
-        <h2
-            class="text-3xl md:text-5xl lg:text-6xl font-serif text-secondary leading-tight tracking-tight drop-shadow-sm"
+    <div class="relative z-10 w-full max-w-5xl">
+        {/* Glass Card Container */}
+        <div
+            class="relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 backdrop-blur-md shadow-2xl group transition-transform duration-700 hover:scale-[1.01]"
         >
-            "{text}"
-        </h2>
+            {/* Inner Glow Effect */}
+            <div
+                class="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/20 pointer-events-none"
+            >
+            </div>
 
-        {
-            author && (
-                <div class="mt-8 flex items-center justify-center gap-4">
-                    <div class="h-[1px] w-12 bg-secondary/30" />
-                    <p class="text-lg md:text-xl font-medium text-secondary/60 uppercase tracking-widest">
-                        {author}
-                    </p>
-                    <div class="h-[1px] w-12 bg-secondary/30" />
+            <div
+                class="relative flex flex-col md:flex-row items-center p-8 md:p-12 gap-8 md:gap-12"
+            >
+                {/* Quote Icon & Decorative Line */}
+                <div class="flex-shrink-0 flex flex-col items-center gap-4">
+                    <span
+                        class="text-6xl text-accent/40 font-serif leading-none"
+                        >“</span
+                    >
+                    <div
+                        class="hidden md:block w-[1px] h-24 bg-gradient-to-b from-accent/40 to-transparent"
+                    >
+                    </div>
                 </div>
-            )
-        }
+
+                {/* Main Content */}
+                <div class="flex-1 text-center md:text-left">
+                    <h2
+                        class="text-2xl md:text-4xl lg:text-5xl font-serif italic text-white leading-tight tracking-tight drop-shadow-lg mb-6"
+                    >
+                        {text}
+                    </h2>
+
+                    {
+                        author && (
+                            <div class="flex items-center justify-center md:justify-start gap-4">
+                                <div class="w-8 h-[1px] bg-accent/50" />
+                                <p class="text-sm md:text-base font-sans font-medium text-white/70 uppercase tracking-[0.2em]">
+                                    {author}
+                                </p>
+                            </div>
+                        )
+                    }
+                </div>
+
+                {
+                    /* Optional Decorative Right Element (e.g. subtle brand mark or just space) */
+                }
+                <div
+                    class="hidden lg:block absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white/5 to-transparent pointer-events-none"
+                >
+                </div>
+            </div>
+        </div>
     </div>
 </section>

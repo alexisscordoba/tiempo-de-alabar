@@ -1,55 +1,73 @@
 ---
-import { Play, Calendar, MousePointer2 } from "lucide-react";
+import { Play, Calendar, MousePointer2, ChevronDown } from "lucide-react";
+import HeroBackground from "./HeroBackground";
 import { Image } from "astro:assets";
 
 interface Props {
     title: string;
     subtitle: string;
-    background: any;
+    hero_images?: any[];
     badge_text?: string;
     cta_primary?: { label: string; link: string };
     cta_secondary?: { label: string; link: string };
 }
 
-const { title, subtitle, background, badge_text, cta_primary, cta_secondary } =
+const { title, subtitle, hero_images, badge_text, cta_primary, cta_secondary } =
     Astro.props;
+
+// Normalizar imágenes a un array de strings (URLs)
+// Astro assets necesitan ser resueltos a su src string si son objetos importados,
+// pero en content collections suelen venir como objetos con .src o strings directos dependiendo del loader.
+// Asumimos que `background` y `backgrounds` ya vienen procesados o son objetos de imagen.
+// Para pasarlos a React, necesitamos sus URLs.
+
+const resolveImage = (img: any) => {
+    if (!img) return null;
+    if (typeof img === "string") return img;
+    if (typeof img === "object" && img.src) return img.src;
+    return null;
+};
+
+const heroImages =
+    hero_images && hero_images.length > 0
+        ? hero_images.map(resolveImage).filter(Boolean)
+        : [];
 ---
 
 <section
-    class="relative min-h-screen w-full flex items-center justify-center overflow-hidden"
+    class="relative min-h-[100dvh] w-full flex items-center justify-center overflow-hidden"
 >
-    {/* Background Image & Overlay */}
-    <div class="absolute inset-0 z-0">
-        <Image
-            src={background}
-            alt="Hero Background"
-            class="w-full h-full object-cover"
-            quality="high"
-        />
+    {/* Background Carousel & Overlay */}
+    <div class="absolute inset-0 z-0 bg-secondary">
+        <HeroBackground client:load images={heroImages} interval={10000} />
+
+        {/* Smart Gradient Overlay for Readability - Vignette specific */}
         <div
-            class="absolute inset-0 bg-gradient-to-b from-secondary/80 via-secondary/40 to-neutral-1"
+            class="absolute inset-0 bg-gradient-to-b from-black/90 via-transparent to-black/70 z-10"
         >
         </div>
-        <div class="absolute inset-0 bg-black/20"></div>
     </div>
 
     {/* Content Container */}
     <div
-        class="relative z-10 max-w-7xl mx-auto px-6 pt-20 pb-32 text-center flex flex-col items-center"
+        class="relative z-10 max-w-7xl mx-auto px-6 pt-32 pb-20 md:pt-48 md:pb-20 lg:pt-60 lg:pb-28 text-center flex flex-col items-center justify-center h-full"
     >
         {/* Badge */}
         {
             badge_text && (
-                <div class="mb-6 px-4 py-1.5 rounded-full glass-morphism text-xs font-bold text-white tracking-[0.2em] uppercase flex items-center gap-2 animate-fade-in">
-                    <span class="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                <a
+                    href="#featured-grid"
+                    class="mb-6 px-2.5 py-0.5 rounded-full glass-morphism text-[9px] font-bold text-white/50 tracking-[0.25em] uppercase flex items-center gap-2 animate-fade-in hover:scale-105 hover:text-white hover:bg-white/10 transition-all cursor-pointer group"
+                >
+                    <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse group-hover:shadow-[0_0_8px_rgba(62,141,139,0.8)]" />
                     {badge_text}
-                </div>
+                </a>
             )
         }
 
         {/* Typography */}
         <h1
-            class="text-5xl md:text-8xl font-black text-white tracking-tighter leading-[0.9] mb-8 max-w-4xl uppercase"
+            class="glass-text text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter leading-[1.0] mb-8 md:mb-10 max-w-4xl uppercase animate-fade-in-slow"
         >
             {
                 /* Split title by comma to create the line break mentioned in blueprint if needed, 
@@ -58,17 +76,21 @@ const { title, subtitle, background, badge_text, cta_primary, cta_secondary } =
             {title}
         </h1>
 
-        <p class="text-lg md:text-xl text-white/70 font-bold max-w-2xl mb-12">
+        <p
+            class="text-base md:text-xl text-white/80 font-bold max-w-2xl mb-10 md:mb-12 drop-shadow-md"
+        >
             {subtitle}
         </p>
 
         {/* CTAs */}
-        <div class="flex flex-col sm:flex-row items-center gap-4">
+        <div
+            class="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto"
+        >
             {
                 cta_primary && (
                     <a
                         href={cta_primary.link}
-                        class="flex items-center gap-2 px-8 py-4 rounded-full bg-primary text-white font-bold transition-all hover:scale-105 hover:shadow-xl hover:shadow-primary/30 active:scale-95 group"
+                        class="flex items-center justify-center gap-2 px-6 py-3.5 md:px-8 md:py-4 rounded-full bg-primary text-white font-bold transition-all hover:scale-105 hover:shadow-xl hover:shadow-primary/30 active:scale-95 group w-full sm:w-auto"
                     >
                         <Play
                             size={20}
@@ -84,7 +106,7 @@ const { title, subtitle, background, badge_text, cta_primary, cta_secondary } =
                 cta_secondary && (
                     <a
                         href={cta_secondary.link}
-                        class="flex items-center gap-2 px-8 py-4 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white font-bold transition-all hover:bg-white/20 hover:scale-105 active:scale-95 group"
+                        class="flex items-center justify-center gap-2 px-6 py-3.5 md:px-8 md:py-4 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white font-bold transition-all hover:bg-white/20 hover:scale-105 active:scale-95 group w-full sm:w-auto"
                     >
                         <Calendar
                             size={20}
@@ -97,18 +119,11 @@ const { title, subtitle, background, badge_text, cta_primary, cta_secondary } =
         </div>
     </div>
 
-    {/* Scroll Indicator */}
+    {/* Scroll Indicator - Minimalist Chevron */}
     <div
-        class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50 animate-bounce"
+        class="absolute bottom-6 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center opacity-70 animate-bounce"
     >
-        <div
-            class="w-6 h-10 border-2 border-white rounded-full flex justify-center p-1"
-        >
-            <div class="w-1 h-2 bg-white rounded-full"></div>
-        </div>
-        <span class="text-[10px] text-white font-bold tracking-widest uppercase"
-            >Scroll</span
-        >
+        <ChevronDown size={32} className="text-white drop-shadow-md" />
     </div>
 </section>
 
@@ -125,5 +140,8 @@ const { title, subtitle, background, badge_text, cta_primary, cta_secondary } =
     }
     .animate-fade-in {
         animation: fade-in 1s ease-out forwards;
+    }
+    .animate-fade-in-slow {
+        animation: fade-in 2s ease-out forwards;
     }
 </style>

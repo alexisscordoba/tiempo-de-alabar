@@ -218,7 +218,11 @@ const pages = defineCollection({
         hero: z.object({
             title: z.string().optional(),
             subtitle: z.string().optional(),
-            background: image().optional(),
+            badge_text: z.string().optional(),
+            // Allows simple string (path) or object (image() helper)
+            // But since config.yml defines a list of "image" fields, it might come as array of strings or array of objects depending on loader.
+            // Using loose type or explicit object if we knew. For now, assuming standard image paths.
+            hero_images: z.array(z.string()).optional(),
             cta_primary_label: z.string().optional(),
             cta_primary_link: z.string().optional(),
             cta_secondary_label: z.string().optional(),

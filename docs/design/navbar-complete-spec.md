@@ -15,6 +15,7 @@ El Navbar es el componente principal de navegación del sitio. Consta de **tres 
 | **Mobile** | < 768px | Sistema de "pastillas flotantes" con menú morphing |
 
 **Breakpoints en Tailwind**:
+
 - `md`: 768px (estándar)
 - `desktop`: 980px (custom, definido en `tailwind.config.mjs`)
 
@@ -34,6 +35,7 @@ El Navbar es el componente principal de navegación del sitio. Consta de **tres 
 ## 3. Datos y Configuración
 
 ### Enlaces de Navegación
+
 ```
 INICIO      → /
 ACERCA DE   → /acerca-de
@@ -43,6 +45,7 @@ CONTACTO    → /contacto
 ```
 
 ### Enlaces Sociales (Mobile)
+
 ```
 Spotify (Music icon)  → #
 YouTube (Play icon)   → #
@@ -50,6 +53,7 @@ Apoyo (Heart icon)    → /apoyo
 ```
 
 ### Props del Componente
+
 ```typescript
 interface Props {
     streamingLinks?: { label: string; url: string; type: string }[];
@@ -130,6 +134,7 @@ El navbar interpola entre dos estados según `isScrolled` (threshold: 100px de s
 ### 5.3 Logo + Texto de Marca
 
 #### Estructura
+
 ```
 <div> (flex, select-none, draggable=false)
   <div> ♫ </div>          ← Logo circular
@@ -141,26 +146,30 @@ El navbar interpola entre dos estados según `isScrolled` (threshold: 100px de s
 ```
 
 #### Logo (Círculo ♫)
+
 - **Tamaño**: `w-8 h-8` (32px)
 - **Fondo**: `bg-primary` (teal `#3e8d8b`)
 - **Texto**: `text-white text-sm font-bold`
 - **Sombra**: `shadow-lg shadow-primary/20`
 - **Interacción**: `cursor-pointer`
 - **Al hacer clic** (`active:`):
+  - **Scroll to Top**: Realiza un scroll suave (`smooth`) hasta el inicio de la página (`top: 0`).
   - Glow: `shadow-[0_0_18px_rgba(62,141,139,0.6)]`
   - Escala: `active:scale-95`
-- **Logo Glow Click** (solo en Hero):
-  - Al hacer clic se activa `logoGlow = true` por **600ms**
-  - El texto reacciona con un `text-shadow` orgánico y un micro `translateX(2px)` que simula una onda de energía del logo hacia el texto
-  - En estado Sticky: `handleLogoClick` retorna sin efecto
+- **Logo Glow Click**:
+  - Al hacer clic se activa `logoGlow = true` por **600ms**.
+  - El texto reacciona con un `text-shadow` orgánico y un micro `translateX(2px)` que simula una onda de energía del logo hacia el texto.
+  - **Nota**: A diferencia de versiones anteriores, este comportamiento ahora funciona tanto en estado **Hero** como en **Sticky**.
 
 #### Texto de Marca
+
 - **Tipografía**: `font-black text-lg tracking-tighter`
 - **Color**: Hero → `text-white` | Sticky → `text-secondary`
 - **No seleccionable**: `pointer-events-none` + `select-none` en contenedor
 - **No arrastrable**: `draggable={false}` en contenedor
 
 ##### Transición del Texto (Hero ↔ Sticky)
+
 - **"Tiempo de\u00A0"** (parte colapsable):
   - `overflow-hidden` con `max-width` animado:
     - Hero: `max-width: 7em`, `opacity: 1`
@@ -171,21 +180,27 @@ El navbar interpola entre dos estados según `isScrolled` (threshold: 100px de s
   - Siempre visible, con `italic` para destaque sutil
 
 ##### Efecto Glow en Texto (Solo Hero)
+
 Cuando `logoGlow && !isScrolled`:
+
 ```css
 text-shadow: 0 0 12px rgba(62,141,139,0.7), 0 0 24px rgba(62,141,139,0.3);
 transform: translateX(2px);
 ```
+
 Cuando inactivo:
+
 ```css  
 text-shadow: 0 0 0px transparent;
 transform: translateX(0);
 ```
+
 Transición: `duration-500`.
 
 ### 5.4 Mini Navbar (Inner Pill)
 
 #### Contenedor
+
 - **Layout**: `flex items-center gap-0.5 p-0.5 rounded-full`
 - **Blur**: `backdrop-blur-md` (**constante** en ambos estados — previene re-composición de capas)
 - **Border**: Hero → `border-white/30` | Sticky → `border-white/40`
@@ -194,6 +209,7 @@ Transición: `duration-500`.
 - **Shadow**: Hero → `shadow-none` | Sticky → `shadow-sm`
 
 #### Reflección de Mouse (Mini Navbar)
+
 - Overlay absoluto con `pointer-events-none`
 - Gradiente: `radial-gradient(150px circle at Xpx Ypx, rgba(255,255,255,0.15), transparent 80%)`
 - Visibilidad: `opacity-0` → `group-hover/mini:opacity-100`
@@ -201,12 +217,14 @@ Transición: `duration-500`.
 - Transición: `duration-500`
 
 #### Links de Navegación
+
 - **Tipografía**: `font-black text-[10px] tracking-[0.05em]`
 - **Padding**: Tablet → `px-2.5` | Desktop → `desktop:px-4`
 - **Padding Y**: `py-1.5`
 - **Forma**: `rounded-full`
 
 ##### Estado Activo
+
 - Color: `text-white`
 - Sombra: `shadow-md shadow-primary/20`
 - Fondo animado: `motion.div` con `layoutId="active-pill"` y `bg-primary`
@@ -214,6 +232,7 @@ Transición: `duration-500`.
   - **Se desliza suavemente** entre links activos gracias a `layoutId`
 
 ##### Estado Hover (links no activos)
+
 - Hero: texto `text-white/80` → `hover:text-white` + underline `bg-white/80`
 - Sticky: texto `text-secondary/70` → `hover:text-secondary` + underline `bg-primary/40`
 - Underline animado: `w-0` → `group-hover/link:w-1/3`, `h-0.5`, centrado con `left-1/2 -translate-x-1/2`
@@ -250,6 +269,7 @@ Se renderiza con `md:hidden`. Usa un sistema de dos "pastillas flotantes" indepe
 Posición fija: `top-4 left-4 z-50`.
 
 #### Visibilidad
+
 - Se muestra cuando `showMobileNav && !isMenuOpen`
 - Envuelta en `AnimatePresence` para animación de entrada/salida:
   - Entrada: `{ y: -100, opacity: 0 }` → `{ y: 0, opacity: 1 }`
@@ -257,6 +277,7 @@ Posición fija: `top-4 left-4 z-50`.
   - Transición spring: `stiffness: 300`, `damping: 30`
 
 #### Diseño
+
 - **Forma**: `rounded-full`
 - **Glass**: `backdrop-blur-md border border-white/10 shadow-lg`
 - **Background**: Hero → `bg-black/30` | Sticky → `bg-black/20`
@@ -272,11 +293,14 @@ Posición fija: `top-4 right-4 z-[60]`.
 Contenedor `motion.div` con `initial={false}` y `animate={isMenuOpen ? "open" : "closed"}`.
 
 #### Glass
+
 - `bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl`
 - Forma: Cerrado → `rounded-full` | Abierto → `rounded-3xl`
 
 #### Estado Cerrado (Compacto)
+
 Variantes de `motion.div`:
+
 ```javascript
 closed: {
     width: isScrolled ? 44 : 100,   // Círculo vs Píldora
@@ -284,11 +308,14 @@ closed: {
     backgroundColor: isScrolled ? "rgba(0,0,0,0.2)" : "rgba(0,0,0,0.3)"
 }
 ```
+
 - **Modo compacto** (scrolled): Solo icono `Menu` (☰), 24px, `text-white`
 - **Modo extendido** (hero): Botón `Play` a la izquierda (18px, fill) + separador (`border-r border-white/20 pr-2 mr-2`) + icono `Menu`
 
 #### Estado Abierto (Menú Desplegado)
+
 Variantes:
+
 ```javascript
 open: {
     width: 300,
@@ -297,9 +324,11 @@ open: {
     borderColor: "rgba(255,255,255,0.1)"
 }
 ```
+
 Transición spring: `stiffness: 400`, `damping: 30`
 
 ##### Contenido del Menú Abierto
+
 - **Botón cerrar**: `X` (28px), posición `absolute top-6 right-6`, `text-white/70 hover:text-white`
 - **Links de navegación**: Aparecen en cascada
   - `text-2xl font-bold text-white hover:text-primary`
@@ -319,10 +348,12 @@ scrollY < lastScrollY                     → showMobileNav = true   (↑ Subien
 ```
 
 Cuando `showMobileNav = false`:
+
 - Pastilla izquierda se oculta (AnimatePresence exit)  
 - Pastilla derecha se vuelve compacta (`width: 44`)
 
 Cuando `showMobileNav = true`:
+
 - Pastilla izquierda reaparece con spring animation
 - Pastilla derecha se extiende (`width: 100`) si está en hero
 
@@ -331,6 +362,7 @@ Cuando `showMobileNav = true`:
 ## 7. StreamingModal
 
 Se abre desde el botón Play (desktop y mobile). Componente externo `StreamingModal`:
+
 ```typescript
 <StreamingModal
     isOpen={isModalOpen}

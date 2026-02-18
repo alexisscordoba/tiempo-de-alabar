@@ -420,7 +420,12 @@ collections:
             fields:
               - { label: "Título", name: "title", widget: "string" }
               - { label: "Subtítulo", name: "subtitle", widget: "string", required: false }
-              - { label: "Imagen o Video de Fondo", name: "background", widget: "image", hint: "Soportado: .jpg, .png o .mp4" }
+              - { label: "Subtítulo", name: "subtitle", widget: "string", required: false }
+              - label: "Imágenes de Fondo (Carrusel)"
+                name: "hero_images"
+                widget: "list"
+                field: { label: "Imagen", name: "image", widget: "image" }
+                hint: "Sube una o varias imágenes. Si hay más de una, se mostrarán como carrusel."
               - { label: "Texto Botón Primario", name: "cta_primary_label", widget: "string", default: "Nuestra música" }
               - { label: "Link Botón Primario", name: "cta_primary_link", widget: "string", default: "/musica" }
               - { label: "Texto Botón Secundario", name: "cta_secondary_label", widget: "string", default: "Agenda" }
