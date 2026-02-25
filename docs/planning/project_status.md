@@ -33,7 +33,11 @@ Este documento rastrea el progreso del desarrollo del sitio web de "Tiempo de Al
 - [x] **Navbar:** Diseño y lógica 100% finalizados (Desktop/Tablet/Mobile).
 - [ ] **Hero Component:** Implementado (Funcional), pendiente pulido estético de capas y parpado.
 - [ ] **Inspirational Section:** Implementado (Funcional), pendiente refinamiento tipográfico.
-- [ ] **Featured Grid:** Implementado (Funcional), pendiente efectos hover y sincronización de vidrio.
+- [x] **Featured Grid:** Pulido completo. Glassmorphism, hover interactivos, badges refinados, gradientes condicionales.
+  - Tarjeta Canción Destacada: Cover limpio, info + botones aparecen solo en hover/tap.
+  - Tarjeta Evento Destacado: Imagen de fondo con gradientes de legibilidad y overlay animado.
+  - Tarjeta Organizar Evento: Glass layer con orbe decorativo.
+- [x] **SongStreamingModal:** Nuevo componente global reutilizable (`client:idle` en Layout). Se abre desde cualquier parte del sitio via `CustomEvent('open-song-modal')`. Layout responsive: cover + plataformas.
 - [ ] **Music Preview:** Implementado (Funcional), pendiente interactividad de plataformas.
 
 ### Fase 6: Páginas Interiores (📅 Pendiente)

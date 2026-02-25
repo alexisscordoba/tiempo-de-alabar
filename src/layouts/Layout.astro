@@ -3,6 +3,7 @@ import "../styles/global.css";
 import "../styles/fonts.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer.astro";
+import SongStreamingModal from "../components/SongStreamingModal";
 import { ClientRouter } from "astro:transitions";
 import { getEntry } from "astro:content";
 
@@ -84,5 +85,8 @@ const streamingLinks =
 		</main>
 
 		<Footer />
+
+		{/* Global Song Streaming Modal — triggered via custom event */}
+		<SongStreamingModal client:idle />
 	</body>
 </html>
